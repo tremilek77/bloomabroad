@@ -1,0 +1,496 @@
+/* Fonts — must precede the Tailwind import (CSS @import ordering rule) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* ================================================================== */
+/*  DESIGN TOKENS                                                      */
+/*  Two palettes, swapped by [data-palette] on <html>.                */
+/*  Default (no attribute) = GREEN-LED — matches the live brand.      */
+/*  [data-palette="rose"]  = ROSE-LED  — the playbook's default.      */
+/*  Only colours change between palettes; type/spacing stay constant  */
+/*  so the comparison is a clean A/B of the palette itself.           */
+/* ================================================================== */
+
+:root {
+  --radius: 0.75rem;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+
+  /* ---------- GREEN-LED (default, forest + mint) ------------------ */
+  --background: oklch(97.2% 0.012 95);
+  --foreground: oklch(23.5% 0.055 155);
+
+  --card: oklch(98.5% 0.008 95);
+  --card-foreground: oklch(23.5% 0.055 155);
+
+  --popover: oklch(98.5% 0.008 95);
+  --popover-foreground: oklch(23.5% 0.055 155);
+
+  --primary: oklch(23.5% 0.055 155);          /* deep forest button */
+  --primary-foreground: oklch(97.2% 0.012 95);
+
+  --secondary: oklch(94% 0.028 145);          /* pale sage */
+  --secondary-foreground: oklch(23.5% 0.055 155);
+
+  --muted: oklch(94% 0.028 145);
+  --muted-foreground: oklch(42% 0.04 155);
+
+  --accent: oklch(74% 0.14 158);              /* mint */
+  --accent-foreground: oklch(15% 0.04 155);
+
+  --border: oklch(88% 0.02 145);
+  --input: oklch(90% 0.02 145);
+  --ring: oklch(74% 0.14 158);
+
+  --destructive: oklch(57.7% 0.22 27);
+  --destructive-foreground: oklch(98% 0.003 250);
+
+  /* Brand-expressive tokens (used by both palettes, redefined below) */
+  --heading: oklch(18% 0.05 155);             /* deepest forest */
+  --brand: oklch(74% 0.14 158);               /* highlight accent (mint) */
+  --signal: oklch(64% 0.15 158);              /* "growth" UX signal — eligibility/progress */
+  --signal-foreground: oklch(99% 0.01 150);
+  --eyebrow: oklch(45% 0.09 158);             /* small caps label */
+
+  /* The "bloom" gradient — here the logo's rose swirl, used sparingly */
+  --gradient-bloom: linear-gradient(135deg, #f0568c 0%, #d6336c 50%, #b3204e 100%);
+
+  /* Hero atmosphere */
+  --gradient-hero:
+    radial-gradient(circle at 18% 0%, oklch(94% 0.06 155) 0%, transparent 55%),
+    radial-gradient(circle at 92% 12%, oklch(86% 0.09 158 / 0.55) 0%, transparent 50%),
+    linear-gradient(180deg, oklch(97.2% 0.012 95) 0%, oklch(96% 0.02 130) 100%);
+}
+
+/* ---------- ROSE-LED (playbook "Rose & Growth") ------------------- */
+[data-palette='rose'] {
+  --background: #fcfbf8;              /* cream */
+  --foreground: #2a2028;             /* warm ink */
+
+  --card: #ffffff;
+  --card-foreground: #2a2028;
+
+  --popover: #ffffff;
+  --popover-foreground: #2a2028;
+
+  --primary: #be2e5e;                /* Rose Deep — AA-safe with white text */
+  --primary-foreground: #ffffff;
+
+  --secondary: #fbe4ec;             /* blush */
+  --secondary-foreground: #6e1e43;  /* plum */
+
+  --muted: #fbe4ec;
+  --muted-foreground: #8a7480;      /* mauve */
+
+  --accent: #d63a6a;                /* raspberry rose highlight */
+  --accent-foreground: #ffffff;
+
+  --border: #efd9e1;
+  --input: #ecd4dd;
+  --ring: #d63a6a;
+
+  --heading: #6e1e43;               /* plum headings */
+  --brand: #d63a6a;                 /* raspberry rose */
+  --signal: #2f8f5b;                /* botanical green — growth UX signal */
+  --signal-foreground: #ffffff;
+  --eyebrow: #be2e5e;
+
+  --gradient-bloom: linear-gradient(135deg, #f0568c 0%, #d6336c 50%, #b3204e 100%);
+
+  --gradient-hero:
+    radial-gradient(circle at 18% 0%, #fbe4ec 0%, transparent 55%),
+    radial-gradient(circle at 92% 12%, rgba(214, 58, 106, 0.18) 0%, transparent 50%),
+    linear-gradient(180deg, #fcfbf8 0%, #fbf3f6 100%);
+}
+
+/* ---------- SAASTA (dark, near-black + lime) --------------------- */
+/*  Scoped to .saasta so it's a self-contained showcase surface.     */
+/*  Matches the Framer "Saasta" template look.                        */
+.saasta {
+  --background: oklch(15% 0.012 150);        /* near-black, faint green */
+  --foreground: oklch(96% 0.01 130);         /* off-white */
+
+  --card: oklch(19% 0.014 150);              /* raised dark panel */
+  --card-foreground: oklch(96% 0.01 130);
+
+  --popover: oklch(19% 0.014 150);
+  --popover-foreground: oklch(96% 0.01 130);
+
+  --primary: oklch(88% 0.19 128);            /* lime / chartreuse */
+  --primary-foreground: oklch(20% 0.05 140); /* dark ink on lime */
+
+  --secondary: oklch(24% 0.016 150);
+  --secondary-foreground: oklch(96% 0.01 130);
+
+  --muted: oklch(24% 0.016 150);
+  --muted-foreground: oklch(72% 0.02 140);
+
+  --accent: oklch(88% 0.19 128);             /* lime */
+  --accent-foreground: oklch(20% 0.05 140);
+
+  --border: oklch(30% 0.014 150);
+  --input: oklch(30% 0.014 150);
+  --ring: oklch(88% 0.19 128);
+
+  --heading: oklch(98% 0.008 130);
+  --brand: oklch(88% 0.19 128);
+  --signal: oklch(88% 0.19 128);
+  --signal-foreground: oklch(20% 0.05 140);
+  --eyebrow: oklch(84% 0.18 128);
+
+  /* charts — lime-forward series on dark */
+  --chart-1: oklch(88% 0.19 128);            /* lime */
+  --chart-2: oklch(72% 0.15 165);            /* teal-green */
+  --chart-3: oklch(80% 0.12 110);            /* yellow-green */
+  --chart-4: oklch(65% 0.12 150);            /* forest */
+  --chart-5: oklch(90% 0.08 130);            /* pale lime */
+
+  --gradient-bloom: linear-gradient(135deg, #d9f99d 0%, #a3e635 50%, #65a30d 100%);
+
+  --gradient-hero:
+    radial-gradient(circle at 15% 0%, oklch(88% 0.19 128 / 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 85% 10%, oklch(70% 0.15 150 / 0.14) 0%, transparent 45%),
+    linear-gradient(180deg, oklch(15% 0.012 150) 0%, oklch(13% 0.01 150) 100%);
+}
+
+/* ---------- SAASTA LIGHT (data-theme="light") -------------------- */
+/*  A purpose-built light theme — not an inversion. On cream, lime is  */
+/*  unreadable, so the accent shifts to a deep emerald for text/fills, */
+/*  and lime survives only as the shine highlight. Glows become soft   */
+/*  elevation shadows; surfaces are white on a warm off-white canvas.  */
+.saasta[data-theme='light'] {
+  --background: oklch(98% 0.01 125);          /* warm off-white */
+  --foreground: oklch(24% 0.03 155);          /* deep ink green */
+
+  --card: oklch(100% 0 0);                    /* clean white panels */
+  --card-foreground: oklch(24% 0.03 155);
+
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(24% 0.03 155);
+
+  --primary: oklch(52% 0.15 152);             /* deep emerald — white text AA */
+  --primary-foreground: oklch(99% 0.01 130);
+
+  --secondary: oklch(95.5% 0.03 140);         /* pale green */
+  --secondary-foreground: oklch(30% 0.06 152);
+
+  --muted: oklch(96% 0.018 135);
+  --muted-foreground: oklch(45% 0.03 150);    /* readable gray-green */
+
+  --accent: oklch(58% 0.16 150);              /* vivid emerald */
+  --accent-foreground: oklch(99% 0.01 130);
+
+  --border: oklch(90% 0.018 140);
+  --input: oklch(92% 0.016 140);
+  --ring: oklch(58% 0.16 150);
+
+  --destructive: oklch(57.7% 0.22 27);
+  --destructive-foreground: oklch(99% 0.01 130);
+
+  --heading: oklch(22% 0.045 155);            /* deepest ink green */
+  --brand: oklch(52% 0.16 150);
+  --signal: oklch(50% 0.17 150);              /* rich green — glimmer base */
+  --signal-foreground: oklch(99% 0.01 130);
+  --eyebrow: oklch(48% 0.15 150);
+
+  /* charts — deeper green series for contrast on white */
+  --chart-1: oklch(56% 0.16 150);
+  --chart-2: oklch(58% 0.11 200);
+  --chart-3: oklch(66% 0.14 130);
+  --chart-4: oklch(48% 0.12 165);
+  --chart-5: oklch(72% 0.13 110);
+
+  --gradient-bloom: linear-gradient(135deg, #86efac 0%, #22c55e 50%, #15803d 100%);
+
+  --gradient-hero:
+    radial-gradient(circle at 15% 0%, oklch(88% 0.09 150 / 0.5) 0%, transparent 48%),
+    radial-gradient(circle at 88% 8%, oklch(85% 0.1 165 / 0.35) 0%, transparent 46%),
+    linear-gradient(180deg, oklch(99% 0.008 125) 0%, oklch(97% 0.014 135) 100%);
+}
+
+/* ================================================================== */
+/*  Tailwind theme mapping (v4)                                        */
+/* ================================================================== */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-heading: var(--heading);
+  --color-brand: var(--brand);
+  --color-signal: var(--signal);
+  --color-signal-foreground: var(--signal-foreground);
+  --color-eyebrow: var(--eyebrow);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+/* ================================================================== */
+/*  Base                                                               */
+/* ================================================================== */
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Utility: the bloom gradient as text */
+.text-bloom {
+  background: var(--gradient-bloom);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ================================================================== */
+/*  INTERACTIONS — hover, glimmer, glass, glow                        */
+/* ================================================================== */
+
+/* Interactive card: zoom + lift + lime glow border on hover */
+.card-interactive {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background-color 0.35s ease;
+  will-change: transform;
+}
+.card-interactive:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: color-mix(in oklch, var(--primary) 55%, transparent);
+  box-shadow:
+    0 18px 50px -18px color-mix(in oklch, var(--primary) 45%, transparent),
+    inset 0 1px 0 0 color-mix(in oklch, #fff 10%, transparent);
+}
+
+/* Glimmer: a diagonal shine that sweeps across on hover */
+.glimmer {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.glimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    color-mix(in oklch, #fff 22%, transparent) 48%,
+    color-mix(in oklch, var(--primary) 20%, transparent) 52%,
+    transparent 70%
+  );
+  transform: translateX(-160%);
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.glimmer:hover::after {
+  transform: translateX(160%);
+}
+
+/* Glass surface */
+.glass {
+  background: color-mix(in oklch, var(--card) 68%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid color-mix(in oklch, #fff 8%, transparent);
+}
+
+/* Sheen that continuously travels across a filled button (subtle) */
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-sheen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    color-mix(in oklch, #fff 45%, transparent) 50%,
+    transparent 65%
+  );
+  transform: translateX(-160%);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.btn-sheen:hover::before {
+  transform: translateX(160%);
+}
+
+/* Animated underline for nav links (grows from left) */
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 100%;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* Icon chip zoom, driven by parent .group hover */
+.group:hover .icon-zoom {
+  transform: scale(1.12) rotate(-3deg);
+}
+.icon-zoom {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Soft pulsing glow — for the live/status dot */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--primary) 60%, transparent);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 6px color-mix(in oklch, var(--primary) 0%, transparent);
+  }
+}
+.pulse-dot {
+  animation: glow-pulse 2.4s ease-in-out infinite;
+}
+
+/* Gentle float for the hero cluster ambience */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+/* Emphasized heading text: lime, with a light sweep that loops across it.
+   Repeating gradient (both ends are solid lime, so tiling is seamless and
+   the text is always fully covered — no clipping at any frame). */
+@keyframes text-glimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+.text-glimmer {
+  background-image: linear-gradient(
+    110deg,
+    var(--signal) 0%,
+    var(--signal) 42%,
+    color-mix(in oklch, #fff 92%, var(--signal)) 50%,
+    var(--signal) 58%,
+    var(--signal) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: text-glimmer 5s linear infinite;
+  /* keep descenders (g, y, p) from being clipped */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* ---- Light-theme reworks of glow/glimmer/glass (not inversions) ---- */
+.saasta[data-theme='light'] .card-interactive:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: color-mix(in oklch, var(--primary) 42%, transparent);
+  box-shadow:
+    0 22px 48px -24px oklch(35% 0.06 155 / 0.45),
+    0 4px 14px -8px oklch(35% 0.06 155 / 0.18);
+}
+.saasta[data-theme='light'] .glimmer::after {
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    color-mix(in oklch, var(--primary) 12%, transparent) 50%,
+    transparent 70%
+  );
+}
+.saasta[data-theme='light'] .glass {
+  background: color-mix(in oklch, #fff 72%, transparent);
+  border-color: color-mix(in oklch, var(--foreground) 10%, transparent);
+}
+/* Softer button shadow on light */
+.saasta[data-theme='light'] .btn-sheen::before {
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    color-mix(in oklch, #fff 55%, transparent) 50%,
+    transparent 65%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
