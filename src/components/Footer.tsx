@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { BloomMark } from './Logo'
 
 export function Footer() {
@@ -26,12 +25,6 @@ export function Footer() {
               {l}
             </a>
           ))}
-          <Link
-            to="/admin"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Waitlist data
-          </Link>
         </nav>
       </div>
     </footer>
