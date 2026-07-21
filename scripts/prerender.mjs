@@ -17,7 +17,6 @@
 // the team; can be hardened later (e.g. skip re-animating already-visible
 // content) if it turns out to be noticeable in practice.
 
-import { chromium } from 'playwright'
 import { createServer } from 'node:http'
 import { readFile, writeFile, stat } from 'node:fs/promises'
 import path from 'node:path'
@@ -40,6 +39,43 @@ const MIME = {
   '.txt': 'text/plain; charset=utf-8',
   '.xml': 'application/xml; charset=utf-8',
   '.woff2': 'font/woff2',
+}
+
+// Launch a headless Chromium. On Vercel (Amazon Linux build container),
+// Playwright's own browser binary isn't present and system libs are
+// missing, so we use @sparticuz/chromium — a Chromium build bundled with
+// the required .so libraries for exactly this environment — driven by
+// playwright-core. Locally (Windows/macOS dev), we use the full Playwright
+// package's downloaded browser, with a fallback to sparticuz.
+async function launchSparticuz() {
+  const [{ default: sparticuz }, { chromium }] = await Promise.all([
+    import('@sparticuz/chromium'),
+    import('playwright-core'),
+  ])
+  const executablePath = await sparticuz.executablePath()
+  if (!executablePath) {
+    throw new Error('@sparticuz/chromium executablePath() returned empty')
+  }
+  console.log('[prerender] using @sparticuz/chromium at', executablePath)
+  return chromium.launch({
+    args: sparticuz.args,
+    executablePath,
+    headless: true,
+  })
+}
+
+async function launchBrowser() {
+  if (process.env.VERCEL) return launchSparticuz()
+  try {
+    const { chromium } = await import('playwright')
+    return await chromium.launch()
+  } catch (err) {
+    console.warn(
+      '[prerender] local Playwright launch failed, falling back to @sparticuz/chromium:',
+      err.message,
+    )
+    return launchSparticuz()
+  }
 }
 
 async function serveStatic(req, res) {
@@ -75,7 +111,7 @@ async function main() {
   const { port } = server.address()
   const url = `http://127.0.0.1:${port}/`
 
-  const browser = await chromium.launch()
+  const browser = await launchBrowser()
   const page = await browser.newPage({ viewport: { width: 1280, height: 2400 } })
 
   console.log(`[prerender] loading ${url}`)
@@ -98,10 +134,21 @@ async function main() {
 
   const outPath = path.join(distDir, 'index.html')
   await writeFile(outPath, html, 'utf8')
-  console.log(`[prerender] wrote ${html.length.toLocaleString()} chars to dist/index.html`)
+  console.log(
+    `[prerender] ✓ SUCCESS — wrote ${html.length.toLocaleString()} chars of real HTML to dist/index.html`,
+  )
 }
 
 main().catch((err) => {
-  console.error('[prerender] failed:', err)
-  process.exit(1)
+  // Non-fatal by design: a prerender failure must NOT block the deploy.
+  // The site still ships as a normal client-rendered SPA (fully functional
+  // for humans) — only the crawler-facing initial HTML is affected. This
+  // loud marker is what to look for in the Vercel build log.
+  console.error(
+    '\n[prerender] ✗ FAILED — deploying as a client-rendered SPA instead.\n' +
+      '            The app works for visitors, but crawlers/AI engines will see\n' +
+      '            the empty shell until this is resolved. Error:\n',
+    err,
+  )
+  process.exit(0)
 })
