@@ -125,7 +125,7 @@ async function main() {
   await browser.close()
   await new Promise((resolve) => server.close(resolve))
 
-  if (!html.includes('Know before you') || html.includes('id="root"></div>')) {
+  if (!html.includes('The right student') || html.includes('id="root"></div>')) {
     throw new Error(
       'Prerendered HTML looks empty/unexpected — refusing to overwrite dist/index.html. ' +
         'Check that the app actually rendered content.',

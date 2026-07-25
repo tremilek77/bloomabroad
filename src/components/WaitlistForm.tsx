@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -26,17 +26,24 @@ export function WaitlistForm() {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: '',
       email: '',
-      // sticky: default to whichever audience the visitor was reading
       role: audience === 'students' ? 'Student' : 'University',
       org: '',
     },
   })
+
+  // Keep "I am a" in sync with the branch the visitor picked on the selector
+  // (the choice happens after this form has mounted, so defaultValues alone
+  // wouldn't reflect it). The visitor can still override it manually.
+  useEffect(() => {
+    setValue('role', audience === 'students' ? 'Student' : 'University')
+  }, [audience, setValue])
 
   async function onSubmit(values: FormValues) {
     setSubmitError(null)
