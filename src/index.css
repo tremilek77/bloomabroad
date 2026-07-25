@@ -482,6 +482,23 @@ body {
   );
 }
 
+/* Vertical auto-scroll feed (university applicant list). The inner list is
+   rendered twice; translating it -50% loops seamlessly. Pauses on hover. */
+@keyframes vscroll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+.vscroll {
+  animation: vscroll 16s linear infinite;
+}
+.vscroll-wrap:hover .vscroll {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -492,5 +509,9 @@ body {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+  /* Don't leave the looping feed stuck mid-scroll. */
+  .vscroll {
+    transform: none !important;
   }
 }

@@ -1,6 +1,8 @@
 import { AudienceProvider } from '@/components/audience'
 import { NavBar } from '@/components/NavBar'
-import { Hero } from '@/components/Hero'
+import { Selector } from '@/components/Selector'
+import { BranchHero } from '@/components/BranchHero'
+import { StatStrip } from '@/components/StatStrip'
 import { ValueProps } from '@/components/ValueProps'
 import { HowItWorks } from '@/components/HowItWorks'
 import { Platform } from '@/components/Platform'
@@ -15,7 +17,15 @@ export function LandingPage() {
         <ScrollProgress />
         <NavBar />
         <main>
-          <Hero />
+          {/* Centralized selector + the two branch heroes share the top slot.
+              Only one is visible at a time; the others stay in the DOM (hidden)
+              so crawlers/prerender still read every audience's copy. */}
+          <div id="top">
+            <Selector />
+            <BranchHero audience="universities" />
+            <BranchHero audience="students" />
+          </div>
+          <StatStrip />
           <ValueProps />
           <HowItWorks />
           <Platform />

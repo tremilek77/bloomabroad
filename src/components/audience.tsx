@@ -3,16 +3,38 @@ import { createContext, useContext, useState, type ReactNode } from 'react'
 export type Audience = 'universities' | 'students'
 
 type AudienceContextValue = {
+  /** Which audience's content is shown across the site. */
   audience: Audience
   setAudience: (a: Audience) => void
+  /** Whether the visitor has picked a branch on the selector hero yet. */
+  chosen: boolean
+  /** Pick a branch: sets the audience AND reveals its hero. */
+  choose: (a: Audience) => void
+  /** Return to the centralized selector. */
+  reset: () => void
 }
 
 const AudienceContext = createContext<AudienceContextValue | null>(null)
 
 export function AudienceProvider({ children }: { children: ReactNode }) {
+  // `audience` defaults to 'universities' so the follow-up sections (and the
+  // prerender snapshot) have real content even before a choice is made.
   const [audience, setAudience] = useState<Audience>('universities')
+  const [chosen, setChosen] = useState(false)
+
+  function choose(a: Audience) {
+    setAudience(a)
+    setChosen(true)
+  }
+
+  function reset() {
+    setChosen(false)
+  }
+
   return (
-    <AudienceContext.Provider value={{ audience, setAudience }}>
+    <AudienceContext.Provider
+      value={{ audience, setAudience, chosen, choose, reset }}
+    >
       {children}
     </AudienceContext.Provider>
   )

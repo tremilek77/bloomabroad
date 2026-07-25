@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils'
 import { BloomMark } from '@/components/Logo'
 import { ThemeToggle } from '@/components/saasta/ThemeToggle'
 import { isSupabaseConfigured, supabase } from '@/lib/supabase'
+import { useNoIndex } from '@/lib/seo'
 import {
   clearLocalEntries,
   downloadCsv,
@@ -31,6 +32,8 @@ import {
 type Filter = 'all' | Audience
 
 export function AdminPage() {
+  useNoIndex()
+
   const [session, setSession] = useState<Session | null>(null)
   const [authReady, setAuthReady] = useState(!isSupabaseConfigured)
 

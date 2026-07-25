@@ -9,6 +9,40 @@
       content="BloomAbroad — the enrolment-readiness platform for universities and international students."
     />
     <title>BloomAbroad — Enrolment readiness for universities &amp; international students</title>
+
+    <!--
+      Structured data for AEO/SEO (AI answer engines + search engines read
+      this from the raw HTML payload, before any JS runs). Update "url"
+      here once a custom domain replaces the vercel.app one.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://bloomabroad.vercel.app/#organization",
+            "name": "BloomAbroad",
+            "url": "https://bloomabroad.vercel.app/",
+            "description": "BloomAbroad is the enrolment-readiness platform for universities and international students — giving both sides a clear, evidence-based answer before costly decisions are made."
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "BloomAbroad",
+            "url": "https://bloomabroad.vercel.app/",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Web",
+            "description": "Objective enrolment-readiness intelligence for universities and prospective international students. Universities get a standardised, evidence-based readiness score for every applicant; students get an honest self-assessment of their eligibility before they apply.",
+            "provider": { "@id": "https://bloomabroad.vercel.app/#organization" },
+            "audience": [
+              { "@type": "Audience", "audienceType": "Universities and admissions teams" },
+              { "@type": "Audience", "audienceType": "Prospective international students" }
+            ]
+          }
+        ]
+      }
+    </script>
+
     <script>
       // Set theme before first paint (avoids a flash): use the visitor's
       // saved choice if present, otherwise default to light.
