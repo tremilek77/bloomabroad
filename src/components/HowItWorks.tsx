@@ -9,7 +9,7 @@ const CONTENT: Record<
   universities: {
     steps: [
       'Submit applicant profiles to BloomAbroad via your admissions workflow.',
-      'BloomAbroad scores each applicant against expert-designed eligibility scenarios.',
+      'BloomAbroad scores each applicant against expert-designed readiness scenarios.',
       'Your team receives a readiness report — structured, auditable, and consistent.',
       'Enrol with confidence. Flag risks early. Improve outcomes over time.',
     ],
@@ -19,10 +19,10 @@ const CONTENT: Record<
   },
   students: {
     steps: [
-      'Create your profile — academic background, language scores, finances, and goals.',
-      'BloomAbroad assesses your readiness against real benchmarks from universities worldwide.',
-      "You receive a clear eligibility picture — what's strong, what's a risk, and where you stand.",
-      'Apply with confidence to the universities that are genuinely right for you.',
+      'Create your profile — your background, goals, and circumstances.',
+      'BloomAbroad assesses your enrolment readiness across every factor that matters — benchmarked against real-world outcomes.',
+      "You receive a clear readiness picture — what's strong, what's a risk and the support you need.",
+      'Apply with confidence, knowing exactly where you stand.',
     ],
     ctaLine: 'No application needed. Find out where you stand in minutes.',
     ctaLabel: 'Join the waitlist',

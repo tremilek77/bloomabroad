@@ -7,6 +7,7 @@ import { ValueProps } from '@/components/ValueProps'
 import { HowItWorks } from '@/components/HowItWorks'
 import { Platform } from '@/components/Platform'
 import { WaitlistForm } from '@/components/WaitlistForm'
+import { Faq } from '@/components/Faq'
 import { Footer } from '@/components/Footer'
 import { ScrollProgress } from '@/components/saasta/ScrollProgress'
 
@@ -30,6 +31,7 @@ export function LandingPage() {
           <HowItWorks />
           <Platform />
           <WaitlistForm />
+          <Faq />
         </main>
         <Footer />
       </div>

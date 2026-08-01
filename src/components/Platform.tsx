@@ -3,8 +3,7 @@ import { Reveal } from './saasta/Reveal'
 import { Counter } from './saasta/Counter'
 
 const BULLETS = [
-  'Expert-designed eligibility scenarios are applied from day one.',
-  'Assessments sharpen over time as more data flows through the platform.',
+  'Expert-designed readiness scenarios are applied from day one.',
   'Both universities and students get a clear, consistent readiness signal.',
 ]
 
@@ -14,9 +13,15 @@ const STATS: {
   text?: string
   label: string
 }[] = [
-  { count: 10, suffix: '+ years', label: 'of international education data' },
-  { count: 2, suffix: ' user types', label: 'one unified platform' },
-  { text: 'Practitioners', label: 'built by operators, not theorists' },
+  {
+    count: 10,
+    suffix: '+ years',
+    label: 'Real application, admissions & outcome data',
+  },
+  {
+    text: 'Validated with HEIs admissions teams',
+    label: 'Confirmed to address challenges they face today',
+  },
 ]
 
 export function Platform() {
@@ -31,13 +36,20 @@ export function Platform() {
               The platform
             </p>
             <h2 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-heading md:text-5xl">
-              Built on a decade of <span className="text-glimmer">real data.</span>
+              Built on a decade of real data — and{' '}
+              <span className="text-glimmer">real expertise.</span>
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
               BloomAbroad isn't built on assumptions. It's built on 10+ years of
               accumulated data — student profiles, application outcomes, and
-              in-study performance — from across the international education
-              ecosystem.
+              real student success stories — from across the international
+              education ecosystem.
+            </p>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+              Designed by an expert with a doctoral background in migration and
+              years of experience as an educator, BloomAbroad combines
+              professional expertise with real operational insight — a rare
+              pairing in international education.
             </p>
 
             <ul className="mt-8 space-y-4">

@@ -268,7 +268,7 @@ export function AdminPage() {
                     <th className="px-4 py-3 font-semibold">Email</th>
                     <th className="px-4 py-3 font-semibold">Category</th>
                     <th className="px-4 py-3 font-semibold">
-                      Institution / Country
+                      Institution / Country of study
                     </th>
                     <th className="px-4 py-3 font-semibold">Submitted</th>
                   </tr>

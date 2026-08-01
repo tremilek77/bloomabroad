@@ -1,15 +1,17 @@
 import { Reveal } from './saasta/Reveal'
 
 const STATS = [
-  { value: '10+ years', label: 'Domain expertise behind the platform' },
-  { value: '8 HEIs', label: 'Validated the need in our feasibility study' },
-  { value: '2 customers', label: 'One platform — each served independently' },
+  { value: '10+ years', label: 'Real application, admissions & outcome data' },
+  {
+    value: 'Validated with HEIs admissions teams',
+    label: 'Confirmed to address challenges they face today',
+  },
 ]
 
 export function StatStrip() {
   return (
     <section className="border-y border-border bg-card/40">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 divide-y divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+      <div className="mx-auto grid max-w-4xl grid-cols-1 divide-y divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
         {STATS.map((s, i) => (
           <Reveal key={s.value} delay={i * 0.08}>
             <div className="px-6 py-6 text-center">

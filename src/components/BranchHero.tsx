@@ -26,7 +26,7 @@ const CONTENT: Record<Audience, Content> = {
       </>
     ),
     subhead:
-      'BloomAbroad screens your international applicants against expert-designed eligibility criteria — built from real student data accumulated over a decade. Stop guessing. Start deciding with confidence.',
+      'BloomAbroad screens your international applicants against expert-designed readiness criteria — built from real student data accumulated over a decade. Stop guessing. Start deciding with confidence.',
     avatars: [{ label: 'UL' }, { label: 'DCU' }, { label: 'TUD' }, { label: '+5' }],
     trust: (
       <>
@@ -41,12 +41,12 @@ const CONTENT: Record<Audience, Content> = {
     eyebrow: 'For international students',
     headline: (
       <>
-        Know if you're <span className="text-glimmer">ready to apply</span> —
-        before you spend time and money finding out the hard way.
+        Know <span className="text-glimmer">how qualified</span> you are to
+        study abroad — before you spend time and money finding out the hard way.
       </>
     ),
     subhead:
-      'BloomAbroad assesses your eligibility against real admissions criteria — so you can apply with confidence, not guesswork. Built from over a decade of real international student journeys.',
+      'BloomAbroad gives you an honest, complete picture of your enrolment readiness — so you apply with real confidence, not guesswork. Built from over a decade of real international student journeys.',
     avatars: [
       { label: 'IE' },
       { label: 'NG' },
@@ -83,10 +83,10 @@ export function BranchHero({ audience }: { audience: Audience }) {
           <Reveal>
             <button
               onClick={reset}
-              className="mb-5 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:-translate-x-0.5 hover:border-primary/60 hover:text-primary"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back
+              Back to options
             </button>
           </Reveal>
 

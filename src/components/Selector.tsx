@@ -36,9 +36,9 @@ export function Selector() {
 
         <Reveal delay={0.12}>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            BloomAbroad helps universities assess international applicants, and
-            helps students assess their own eligibility — each independently, on
-            one platform. Who are you?
+            BloomAbroad helps universities assess international applicants'
+            enrolment readiness — and helps students check their own readiness,
+            before they apply.
           </p>
         </Reveal>
 
@@ -55,7 +55,7 @@ export function Selector() {
             <BranchCard
               icon={<GraduationCap className="h-5 w-5" />}
               title="I am an international student"
-              desc="Check your own eligibility before applying anywhere — and know where you truly belong."
+              desc="Check your own enrolment readiness before applying anywhere — and know where you truly belong."
               onClick={() => choose('students')}
             />
           </Reveal>

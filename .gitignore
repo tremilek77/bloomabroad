@@ -20,8 +20,9 @@ dist-ssr
 # Claude Code local-only settings (personal tool permissions)
 .claude/settings.local.json
 
-# Design wireframe reference (kept locally, not part of the app)
+# Client source material (kept locally; content is transcribed into the app)
 bloomabroad_hero_dual_audience.html
+*.docx
 
 # Editor directories and files
 .vscode/*

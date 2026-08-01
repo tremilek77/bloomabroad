@@ -114,7 +114,7 @@ function csvCell(value: string): string {
 }
 
 export function toCsv(entries: WaitlistEntry[]): string {
-  const header = ['Name', 'Email', 'Category', 'Institution / Country', 'Submitted']
+  const header = ['Name', 'Email', 'Category', 'Institution / Country of study', 'Submitted']
   const rows = entries.map((e) =>
     [e.name, e.email, e.role, e.org ?? '', new Date(e.createdAt).toLocaleString()]
       .map((v) => csvCell(String(v)))

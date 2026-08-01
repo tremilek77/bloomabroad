@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Check, Loader2 } from 'lucide-react'
@@ -11,8 +11,7 @@ import { addEntry } from '@/lib/waitlist'
 const schema = z.object({
   name: z.string().trim().min(1, 'Please enter your name'),
   email: z.email('Enter a valid email address'),
-  role: z.enum(['University', 'Student']),
-  org: z.string().trim().optional(),
+  org: z.string().trim().min(1, 'This field is required'),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -22,36 +21,30 @@ export function WaitlistForm() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
+  const isStudent = audience === 'students'
+  // The visitor's branch choice on the hero decides which category they're
+  // registering as — there's no separate "I am a" picker in the form.
+  const role = isStudent ? 'Student' : 'University'
+  const orgLabel = isStudent
+    ? 'What country do you want to study in?'
+    : 'Institution name'
+
   const {
     register,
     handleSubmit,
-    control,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      name: '',
-      email: '',
-      role: audience === 'students' ? 'Student' : 'University',
-      org: '',
-    },
+    defaultValues: { name: '', email: '', org: '' },
   })
-
-  // Keep "I am a" in sync with the branch the visitor picked on the selector
-  // (the choice happens after this form has mounted, so defaultValues alone
-  // wouldn't reflect it). The visitor can still override it manually.
-  useEffect(() => {
-    setValue('role', audience === 'students' ? 'Student' : 'University')
-  }, [audience, setValue])
 
   async function onSubmit(values: FormValues) {
     setSubmitError(null)
     const res = await addEntry({
       name: values.name,
       email: values.email,
-      role: values.role,
-      org: values.org ?? '',
+      role,
+      org: values.org,
     })
     if (!res.ok) {
       setSubmitError("Sorry — we couldn't save that. Please try again.")
@@ -119,46 +112,13 @@ export function WaitlistForm() {
               />
             </Field>
 
-            <Controller
-              control={control}
-              name="role"
-              render={({ field }) => (
-                <fieldset>
-                  <legend className="mb-2 block text-sm font-medium text-foreground">
-                    I am a
-                  </legend>
-                  <div className="grid grid-cols-2 gap-2 rounded-full border border-input bg-card p-1">
-                    {(['University', 'Student'] as const).map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        aria-pressed={field.value === opt}
-                        onClick={() => field.onChange(opt)}
-                        className={cn(
-                          'rounded-full px-4 py-2 text-sm font-medium transition-colors',
-                          field.value === opt
-                            ? 'bg-primary text-primary-foreground shadow-sm'
-                            : 'text-muted-foreground hover:text-foreground',
-                        )}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                </fieldset>
-              )}
-            />
-
-            <Field
-              label="Institution / Country"
-              htmlFor="org"
-              optional
-              error={errors.org?.message}
-            >
+            <Field label={orgLabel} htmlFor="org" error={errors.org?.message}>
               <input
                 id="org"
                 type="text"
-                className={inputCls(false)}
+                autoComplete={isStudent ? 'country-name' : 'organization'}
+                aria-invalid={!!errors.org}
+                className={inputCls(!!errors.org)}
                 {...register('org')}
               />
             </Field>
@@ -194,13 +154,11 @@ function Field({
   label,
   htmlFor,
   error,
-  optional,
   children,
 }: {
   label: string
   htmlFor: string
   error?: string
-  optional?: boolean
   children: React.ReactNode
 }) {
   return (
@@ -210,9 +168,6 @@ function Field({
         className="mb-2 block text-sm font-medium text-foreground"
       >
         {label}
-        {optional && (
-          <span className="ml-1 font-normal text-muted-foreground">(optional)</span>
-        )}
       </label>
       {children}
       {error && (

@@ -21,26 +21,23 @@ const CONTENT: Record<
     eyebrow: string
     heading: string
     emphasis: string
-    intro: string
     cards: Card[]
   }
 > = {
   universities: {
     eyebrow: 'For Universities',
-    heading: 'A smarter way to assess international applicants.',
-    emphasis: 'smarter',
-    intro:
-      'Stop relying on incomplete applications and inconsistent criteria. BloomAbroad gives your admissions team a structured, evidence-based readiness score for every international applicant — so you enrol students who are genuinely ready.',
+    heading: 'Why universities choose BloomAbroad',
+    emphasis: 'choose BloomAbroad',
     cards: [
       {
         icon: Gauge,
         title: 'Standardised readiness scoring',
-        body: 'Every applicant is assessed against expert-designed eligibility scenarios built on 10+ years of real application and in-study outcome data. No more gut feel. No more inconsistency.',
+        body: 'Every applicant is assessed against expert-designed readiness scenarios built on 10+ years of real application and in-study outcome data. No more gut feel. No more inconsistency.',
       },
       {
         icon: Flag,
         title: 'Early risk flagging',
-        body: 'Identify at-risk profiles before they become at-risk students. BloomAbroad surfaces the signals that predict in-study difficulty — giving your team time to intervene or reconsider.',
+        body: 'Identify at-risk profiles before they become at-risk students. BloomAbroad surfaces the signals that predict enrolment red flags — giving your team time to intervene or reconsider.',
       },
       {
         icon: ClipboardCheck,
@@ -56,30 +53,28 @@ const CONTENT: Record<
   },
   students: {
     eyebrow: 'For Students',
-    heading: 'Know exactly where you stand — before you spend a cent.',
-    emphasis: 'exactly where you stand',
-    intro:
-      "Applying to study abroad is one of the biggest decisions you'll make. BloomAbroad gives you an honest, evidence-based picture of your eligibility — so you apply to the right places, with real confidence.",
+    heading: 'Why students choose BloomAbroad',
+    emphasis: 'choose BloomAbroad',
     cards: [
       {
         icon: SearchCheck,
         title: 'Self-assessment before you apply',
-        body: 'Check your academic, financial, and language readiness against real university benchmarks — before you pay application fees, gather documents, or wait months for an answer.',
+        body: 'Get an honest picture of your enrolment readiness — before you pay application fees, gather documents, or wait months for a decision.',
       },
       {
         icon: Target,
-        title: 'Apply to the right universities',
-        body: 'Stop casting a wide net and hoping. BloomAbroad helps you identify which institutions are a genuine fit for your profile — so your time and money go where they have the best chance.',
+        title: 'Know before you commit',
+        body: 'Every study abroad destination is different. BloomAbroad helps you understand how ready you genuinely are to enrol and succeed — not just whether you meet the minimum criteria.',
       },
       {
         icon: Lightbulb,
         title: 'Understand the gaps',
-        body: "If you're not ready yet, BloomAbroad tells you why — and what to work on. So your next application is stronger, not just another attempt.",
+        body: "If you're not fully ready yet, BloomAbroad shows you exactly where the gaps are — so you can strengthen your position before you apply, not after you're rejected.",
       },
       {
         icon: BadgeCheck,
-        title: 'Apply with evidence, not hope',
-        body: 'Arrive at your application with a clear picture of your readiness — and the confidence that you belong there.',
+        title: 'Apply with confidence, not hope',
+        body: 'Walk into every application knowing where you stand. Real readiness, clearly shown — so you apply with real confidence.',
       },
     ],
   },
@@ -87,7 +82,7 @@ const CONTENT: Record<
 
 export function ValueProps() {
   const { audience } = useAudience()
-  const { eyebrow, heading, emphasis, intro, cards } = CONTENT[audience]
+  const { eyebrow, heading, emphasis, cards } = CONTENT[audience]
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
@@ -99,9 +94,6 @@ export function ValueProps() {
           <h2 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-heading md:text-5xl">
             <Highlight text={heading} phrase={emphasis} />
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-            {intro}
-          </p>
         </div>
       </Reveal>
 
