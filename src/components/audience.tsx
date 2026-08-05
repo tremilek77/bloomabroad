@@ -16,6 +16,21 @@ type AudienceContextValue = {
 
 const AudienceContext = createContext<AudienceContextValue | null>(null)
 
+/**
+ * The selector and both branch heroes occupy the same slot (#top) and swap
+ * via `hidden`, not unmount/remount — so switching between them never moves
+ * scroll position on its own. On mobile, if a visitor had scrolled down
+ * within the selector (or a branch hero) before switching, the new section
+ * would render starting mid-way down the viewport instead of from its top.
+ * Scroll #top into view on every choose()/reset() to fix that.
+ */
+function scrollToTop() {
+  const el = document.getElementById('top')
+  if (!el) return
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+}
+
 export function AudienceProvider({ children }: { children: ReactNode }) {
   // `audience` defaults to 'universities' so the follow-up sections (and the
   // prerender snapshot) have real content even before a choice is made.
@@ -25,10 +40,12 @@ export function AudienceProvider({ children }: { children: ReactNode }) {
   function choose(a: Audience) {
     setAudience(a)
     setChosen(true)
+    scrollToTop()
   }
 
   function reset() {
     setChosen(false)
+    scrollToTop()
   }
 
   return (

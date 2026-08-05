@@ -35,7 +35,7 @@ export function Faq() {
       <div className="mx-auto max-w-3xl px-6 py-20 md:py-28">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-[0.14em] text-eyebrow">
-            FAQ
+            FAQs
           </p>
           <h2 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-heading md:text-5xl">
             Questions, <span className="text-glimmer">answered.</span>
