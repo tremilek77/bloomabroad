@@ -54,7 +54,7 @@ export function Selector() {
           <Reveal delay={0.24} from="right">
             <BranchCard
               icon={<GraduationCap className="h-5 w-5" />}
-              title="I am an international student"
+              title="I want to Study Abroad"
               desc="Check your own enrolment readiness before applying anywhere — and know where you truly belong."
               onClick={() => choose('students')}
             />
