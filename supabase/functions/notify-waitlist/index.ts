@@ -8,7 +8,8 @@
 //
 // Secrets (set with `supabase secrets set ...`):
 //   RESEND_API_KEY    — from resend.com
-//   NOTIFY_TO         — where the admin alert lands (your inbox)
+//   NOTIFY_TO         — where the admin alert lands. One address, or a
+//                       comma-separated list to alert several inboxes.
 //   NOTIFY_FROM       — verified sender, e.g. "BloomAbroad <hello@yourdomain.com>"
 //                       (defaults to Resend's test sender — see note below)
 //   WEBHOOK_SECRET    — shared secret; webhook sends it as x-webhook-secret
@@ -37,13 +38,17 @@ const esc = (s: string) =>
   )
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const NOTIFY_TO = Deno.env.get('NOTIFY_TO')
+// One address, or several separated by commas (e.g. "a@x.ie,b@x.ie").
+const NOTIFY_TO = (Deno.env.get('NOTIFY_TO') ?? '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
 const NOTIFY_FROM =
   Deno.env.get('NOTIFY_FROM') ?? 'BloomAbroad <onboarding@resend.dev>'
 const SEND_CONFIRMATION = Deno.env.get('SEND_CONFIRMATION') !== 'false'
 
 async function sendEmail(msg: {
-  to: string
+  to: string | string[]
   subject: string
   html: string
   replyTo?: string
@@ -56,7 +61,7 @@ async function sendEmail(msg: {
     },
     body: JSON.stringify({
       from: NOTIFY_FROM,
-      to: [msg.to],
+      to: Array.isArray(msg.to) ? msg.to : [msg.to],
       subject: msg.subject,
       html: msg.html,
       ...(msg.replyTo ? { reply_to: msg.replyTo } : {}),
@@ -223,7 +228,7 @@ Deno.serve(async (req) => {
   const rec = payload.record
   if (!rec?.email) return new Response('No record', { status: 200 })
 
-  if (!RESEND_API_KEY || !NOTIFY_TO) {
+  if (!RESEND_API_KEY || NOTIFY_TO.length === 0) {
     return new Response('Missing RESEND_API_KEY or NOTIFY_TO', { status: 500 })
   }
 
