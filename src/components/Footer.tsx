@@ -1,25 +1,24 @@
-import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { BloomMark } from './Logo'
-import { useOptionalAudience, type Audience } from './audience'
+import { READY } from '@/content/site'
 import { openCookieSettings } from '@/lib/consent'
 import { COMPANY, SOCIALS } from '@/lib/company'
 
 /**
  * Sitewide footer (brief, Fix 4). Rendered on every public page.
  *
- * The brief's link list includes About, Pricing and "Verify it's us", which
- * are P1/P2 pages that don't exist yet. They're listed here with
- * `ready: false` so nothing links to a dead page; flip each to `true` as its
- * page ships.
+ * Links to pages that aren't built yet are hidden by the READY flags in
+ * content/site.ts, so nothing points at a dead page.
  */
 const SITE_LINKS: { label: string; href: string; ready: boolean }[] = [
-  { label: 'About', href: '/about', ready: false },
-  { label: 'Pricing', href: '/pricing', ready: false },
-  { label: 'How it works', href: '/#how', ready: true },
-  { label: 'FAQs', href: '/#faq', ready: true },
+  { label: 'For students and families', href: '/students', ready: true },
+  { label: 'For universities', href: '/universities', ready: true },
+  { label: 'About', href: '/about', ready: READY.about },
+  { label: 'Pricing', href: '/pricing', ready: READY.pricing },
+  { label: 'How it works', href: '/students#how', ready: true },
+  { label: 'FAQs', href: '/students#faq', ready: true },
   { label: 'Contact', href: '/contact', ready: true },
-  { label: "Verify it's us", href: '/verify', ready: false },
+  { label: "Verify it's us", href: '/verify', ready: READY.verify },
 ]
 
 const linkCls =
@@ -45,19 +44,11 @@ export function Footer() {
           aria-label="Site"
           className="flex flex-wrap gap-x-6 gap-y-2"
         >
-          <AudienceLink audience="students">For students and families</AudienceLink>
-          <AudienceLink audience="universities">For universities</AudienceLink>
-          {SITE_LINKS.filter((l) => l.ready).map((l) =>
-            l.href.startsWith('/#') ? (
-              <a key={l.label} href={l.href} className={linkCls}>
-                {l.label}
-              </a>
-            ) : (
-              <Link key={l.label} to={l.href} className={linkCls}>
-                {l.label}
-              </Link>
-            ),
-          )}
+          {SITE_LINKS.filter((l) => l.ready).map((l) => (
+            <Link key={l.label} to={l.href} className={linkCls}>
+              {l.label}
+            </Link>
+          ))}
         </nav>
 
         <nav
@@ -107,31 +98,5 @@ export function Footer() {
         )}
       </div>
     </footer>
-  )
-}
-
-/** On the homepage this switches the page to that audience in place; from any
- *  other page it's a normal link that opens the homepage on that branch. */
-function AudienceLink({
-  audience,
-  children,
-}: {
-  audience: Audience
-  children: ReactNode
-}) {
-  const ctx = useOptionalAudience()
-  return (
-    <a
-      href={`/?audience=${audience}`}
-      onClick={(e) => {
-        if (ctx) {
-          e.preventDefault()
-          ctx.choose(audience)
-        }
-      }}
-      className={linkCls}
-    >
-      {children}
-    </a>
   )
 }

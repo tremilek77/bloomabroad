@@ -108,7 +108,9 @@ async function serveStatic(req, res) {
 }
 
 const ROUTES = [
-  { route: '/', file: 'index.html', expect: 'The right student', settle: 2000 },
+  { route: '/', file: 'index.html', expect: 'What is enrolment readiness', settle: 2000 },
+  { route: '/students', file: 'students.html', expect: 'Four steps to a clear answer', settle: 2000 },
+  { route: '/universities', file: 'universities.html', expect: 'Four steps. One clear answer.', settle: 2000 },
   { route: '/privacy', file: 'privacy.html', expect: 'The short version', settle: 800 },
   { route: '/terms', file: 'terms.html', expect: 'What BloomAbroad is not', settle: 800 },
   { route: '/contact', file: 'contact.html', expect: 'Making sure it', settle: 800 },

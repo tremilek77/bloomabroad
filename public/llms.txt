@@ -1,0 +1,27 @@
+# BloomAbroad
+
+> BloomAbroad is an independent enrolment readiness check for studying in Ireland. It assesses application readiness and immigration readiness, and an experienced consultant reviews every result. BloomAbroad is a trading name of Ubisphere Ltd, an Irish company based in Cork. It is not an agent and takes no commission.
+
+BloomAbroad does not make admission, visa or immigration decisions, and no outcome guarantees one. Universities decide on admission; Ireland's immigration authorities decide on visa and immigration matters.
+
+## Who it is for
+- Students planning to study in Ireland, and their parents and sponsors
+- Admissions and international offices at Irish universities and colleges (institution workspace in development)
+
+## Key pages
+- [For students and families](https://bloomabroad.vercel.app/students): what the readiness check covers, how it works, FAQs
+- [For universities](https://bloomabroad.vercel.app/universities): enrolment readiness screening for international applications
+- [Contact](https://bloomabroad.vercel.app/contact): hello@bloomabroad.ie for general questions, privacy@bloomabroad.ie for data requests
+- [Privacy Notice](https://bloomabroad.vercel.app/privacy)
+- [Terms of Service](https://bloomabroad.vercel.app/terms)
+- [Complaints](https://bloomabroad.vercel.app/complaints)
+
+## Outcomes
+Ready to Apply · Needs Support · Not Yet in a Position to Apply. Results are issued within 5 working days of a complete set of answers and documents.
+
+## Prices (euro; bookings open January 2027)
+- Readiness Assessment: €30. Founding price for the first 100 waitlist members: €18
+- Readiness Assessment Plus (adds a 30-minute consultant call): €65. Founding price: €39
+- The price is the same whatever the outcome. 14-day right to cancel, as set out in the Terms.
+
+Last updated: 18 November 2026

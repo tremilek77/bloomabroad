@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import { LandingPage } from '@/pages/LandingPage'
 import { CookieConsent } from '@/components/CookieConsent'
+import { founderNode, organizationNode, useSchema, websiteNode } from '@/lib/schema'
 
 // Everything except the homepage is split into its own chunk, so first-time
 // visitors only download what they actually open.
@@ -11,6 +12,8 @@ const lazyPage = <T extends Record<string, React.ComponentType>>(
   name: keyof T,
 ) => lazy(() => load().then((m) => ({ default: m[name] })))
 
+const StudentsPage = lazyPage(() => import('@/pages/Students'), 'StudentsPage')
+const UniversitiesPage = lazyPage(() => import('@/pages/Universities'), 'UniversitiesPage')
 const PrivacyPage = lazyPage(() => import('@/pages/Privacy'), 'PrivacyPage')
 const TermsPage = lazyPage(() => import('@/pages/Terms'), 'TermsPage')
 const ContactPage = lazyPage(() => import('@/pages/Contact'), 'ContactPage')
@@ -55,6 +58,12 @@ function ScrollManager() {
   return null
 }
 
+/** Organization, founder and website structured data, on every page. */
+function SiteSchema() {
+  useSchema('site', [organizationNode(), founderNode(), websiteNode()])
+  return null
+}
+
 const isLocalhost = () =>
   ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname)
 
@@ -62,9 +71,12 @@ function App() {
   return (
     <>
       <ScrollManager />
+      <SiteSchema />
       <Suspense fallback={<div className="min-h-dvh bg-background" />}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/students" element={<StudentsPage />} />
+          <Route path="/universities" element={<UniversitiesPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/contact" element={<ContactPage />} />

@@ -4,9 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Check, ChevronDown, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useAudience } from './audience'
 import { Reveal } from './saasta/Reveal'
-import { addEntry, type NewEntry } from '@/lib/waitlist'
+import { addEntry, type NewEntry, type Role } from '@/lib/waitlist'
 import { COUNTRY_GROUPS, OTHER_COUNTRY } from '@/lib/countries'
 
 /* -------------------------------------------------------------------------
@@ -124,8 +123,20 @@ const schema = z
 
 type FormValues = z.infer<typeof schema>
 
-export function WaitlistForm() {
-  const { audience, chosen } = useAudience()
+type WaitlistFormProps = {
+  /** Role to start on (e.g. Student on /students). The visitor can change it. */
+  defaultRole?: Role
+  eyebrow?: string
+  heading?: React.ReactNode
+  lead?: string
+}
+
+export function WaitlistForm({
+  defaultRole,
+  eyebrow = 'Join the waitlist',
+  heading = <span className="text-glimmer">Be first in line</span>,
+  lead = 'BloomAbroad launches in early 2027, starting with Ireland.',
+}: WaitlistFormProps = {}) {
   const [submitted, setSubmitted] = useState<FormValues | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
@@ -154,12 +165,11 @@ export function WaitlistForm() {
     },
   })
 
-  // If the visitor already picked a branch on the hero, start on that role.
-  // They can still change it here (e.g. to "parent or sponsor").
+  // Pages that serve one audience start on that role. The visitor can still
+  // change it here (e.g. to "parent or sponsor").
   useEffect(() => {
-    if (!chosen) return
-    setValue('role', audience === 'students' ? 'Student' : 'University')
-  }, [chosen, audience, setValue])
+    if (defaultRole) setValue('role', defaultRole)
+  }, [defaultRole, setValue])
 
   const role = watch('role')
   const country = watch('country')
@@ -202,15 +212,13 @@ export function WaitlistForm() {
       <div className="mx-auto max-w-2xl px-6 py-20 text-center md:py-28">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-[0.14em] text-eyebrow">
-            Early access
+            {eyebrow}
           </p>
           <h2 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-heading md:text-5xl">
-            <span className="text-glimmer">Be first.</span> Shape the platform.
+            {heading}
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            BloomAbroad is in pre-launch. We're opening early access to a select
-            group of universities and students who want to help build something
-            better for international education.
+            {lead}
           </p>
         </Reveal>
 

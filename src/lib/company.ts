@@ -47,6 +47,12 @@ export const COMPANY = {
  *  empty the "Book a discovery call" links fall back to an email to hello@. */
 export const BOOKING_URL = ''
 
+/** Where "Book a discovery call" buttons point: the booking link, or an email
+ *  to hello@ until one exists. */
+export const BOOKING_HREF =
+  BOOKING_URL ||
+  `mailto:${COMPANY.helloEmail}?subject=${encodeURIComponent('Discovery call')}`
+
 /** Social accounts. The brief says to show ONLY accounts that already exist,
  *  so this stays empty until Remi supplies real URLs. */
 export const SOCIALS: { label: string; href: string }[] = []
