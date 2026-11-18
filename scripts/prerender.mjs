@@ -1,13 +1,20 @@
-// Build-time prerender step: renders "/" in a real (headless) browser after
-// `vite build`, then writes the resulting HTML — with real text content —
-// back into dist/index.html. This is what lets bots that don't execute JS
-// (many AI answer-engine crawlers) read actual page content in the raw
-// initial HTML payload, rather than an empty `<div id="root"></div>` shell.
+// Build-time prerender step: renders each public page in a real (headless)
+// browser after `vite build`, then writes the resulting HTML — with real text
+// content, and the page's own <title>, description and canonical URL — to a
+// static file. This is what lets bots that don't execute JS (many AI
+// answer-engine crawlers) read actual page content in the raw initial HTML
+// payload, rather than an empty `<div id="root"></div>` shell.
 //
-// Only "/" is rendered. "/admin" is intentionally left as the plain CSR
-// shell — it's a private, auth-gated page that's also blocked in
-// robots.txt and tagged noindex at runtime; there's nothing useful (or
-// wanted) to prerender there.
+// Output (flat files; vercel.json has `cleanUrls: true`, so /privacy serves
+// privacy.html):  dist/index.html, dist/privacy.html, dist/terms.html, ...
+//
+// Left as the plain client-rendered shell on purpose: "/admin" and "/confirm"
+// (private / token pages, noindex + robots-disallowed) — nothing useful to
+// prerender there.
+//
+// To add a page: add it to ROUTES below. `expect` is a phrase that must be in
+// the rendered HTML — if it isn't, the page didn't render properly and that
+// file is NOT written (the site still works, as a client-rendered page).
 //
 // Known trade-off: this captures the page in its fully "settled" state
 // (scroll-reveal animations complete, counters at their final numbers) —
@@ -100,6 +107,46 @@ async function serveStatic(req, res) {
   }
 }
 
+const ROUTES = [
+  { route: '/', file: 'index.html', expect: 'The right student', settle: 2000 },
+  { route: '/privacy', file: 'privacy.html', expect: 'The short version', settle: 800 },
+  { route: '/terms', file: 'terms.html', expect: 'What BloomAbroad is not', settle: 800 },
+  { route: '/contact', file: 'contact.html', expect: 'Making sure it', settle: 800 },
+  { route: '/complaints', file: 'complaints.html', expect: 'How to make a complaint', settle: 800 },
+  { route: '/cookies', file: 'cookies.html', expect: 'The cookies we set', settle: 800 },
+  // The archived backup: prerendered so its noindex tag is in the static HTML.
+  { route: '/old', file: 'old.html', expect: 'archived copy', settle: 2000 },
+]
+
+/** Render one route and return its final HTML. Throws if it looks wrong. */
+async function renderRoute(browser, baseUrl, { route, expect, settle }) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 2400 } })
+  try {
+    await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle', timeout: 30000 })
+
+    // Let scroll-reveal animations settle so the snapshot is complete.
+    await page.waitForTimeout(settle)
+
+    // The cookie banner appears for any visitor with no saved choice, which
+    // is every fresh browser — including this one. It's per-visitor UI, not
+    // page content, so it must not be baked into the static HTML.
+    await page.evaluate(() => {
+      document.querySelectorAll('[data-cookie-banner]').forEach((el) => el.remove())
+      const root = document.documentElement
+      root.style.removeProperty('--cookie-bar-h')
+      if (!root.getAttribute('style')) root.removeAttribute('style')
+    })
+
+    const html = await page.content()
+    if (!html.includes(expect) || html.includes('id="root"></div>')) {
+      throw new Error(`rendered HTML is missing "${expect}" (or #root is empty)`)
+    }
+    return html
+  } finally {
+    await page.close()
+  }
+}
+
 async function main() {
   const server = createServer((req, res) => {
     serveStatic(req, res).catch((err) => {
@@ -109,34 +156,47 @@ async function main() {
   })
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
   const { port } = server.address()
-  const url = `http://127.0.0.1:${port}/`
+  const baseUrl = `http://127.0.0.1:${port}`
 
   const browser = await launchBrowser()
-  const page = await browser.newPage({ viewport: { width: 1280, height: 2400 } })
 
-  console.log(`[prerender] loading ${url}`)
-  await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 })
+  // Render EVERY route first and only then write files, so each route loads
+  // the original (empty) shell rather than a half-prerendered one.
+  const results = []
+  for (const spec of ROUTES) {
+    try {
+      console.log(`[prerender] rendering ${spec.route}`)
+      results.push({ spec, html: await renderRoute(browser, baseUrl, spec) })
+    } catch (err) {
+      // One broken page must not stop the others, or the deploy.
+      console.error(
+        `[prerender] ✗ ${spec.route} FAILED — it will be served as a plain client-rendered page: ${err.message}`,
+      )
+      results.push({ spec, html: null })
+    }
+  }
 
-  // Let scroll-reveal (1200ms fallback) and count-up (1500ms fallback)
-  // finish settling so the snapshot has real, complete final content.
-  await page.waitForTimeout(2000)
-
-  const html = await page.content()
   await browser.close()
   await new Promise((resolve) => server.close(resolve))
 
-  if (!html.includes('The right student') || html.includes('id="root"></div>')) {
-    throw new Error(
-      'Prerendered HTML looks empty/unexpected — refusing to overwrite dist/index.html. ' +
-        'Check that the app actually rendered content.',
+  let ok = 0
+  for (const { spec, html } of results) {
+    if (!html) continue
+    await writeFile(path.join(distDir, spec.file), html, 'utf8')
+    console.log(
+      `[prerender] ✓ ${spec.route} -> dist/${spec.file} (${html.length.toLocaleString()} chars)`,
     )
+    ok++
   }
 
-  const outPath = path.join(distDir, 'index.html')
-  await writeFile(outPath, html, 'utf8')
-  console.log(
-    `[prerender] ✓ SUCCESS — wrote ${html.length.toLocaleString()} chars of real HTML to dist/index.html`,
-  )
+  if (ok === ROUTES.length) {
+    console.log(`[prerender] ✓ SUCCESS — all ${ok} pages prerendered`)
+  } else {
+    console.error(
+      `[prerender] ✗ PARTIAL — ${ok} of ${ROUTES.length} pages prerendered. ` +
+        'The rest still work for visitors, but crawlers see an empty shell for them.',
+    )
+  }
 }
 
 main().catch((err) => {

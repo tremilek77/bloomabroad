@@ -10,8 +10,16 @@ import { WaitlistForm } from '@/components/WaitlistForm'
 import { Faq } from '@/components/Faq'
 import { Footer } from '@/components/Footer'
 import { ScrollProgress } from '@/components/saasta/ScrollProgress'
+import { usePageMeta } from '@/lib/seo'
 
 export function LandingPage() {
+  usePageMeta({
+    title: 'BloomAbroad — Enrolment readiness for universities & international students',
+    description:
+      'BloomAbroad — the enrolment-readiness platform for universities and international students.',
+    path: '/',
+  })
+
   return (
     <AudienceProvider>
       <div className="min-h-dvh bg-background text-foreground">

@@ -1,25 +1,31 @@
-// Supabase Edge Function (Deno) — on a new waitlist signup it:
-//   1. emails YOU an admin alert, and
-//   2. emails the APPLICANT a branded "you're on the list" confirmation.
-// Both via Resend, server-side, so the API key stays secret.
+// Supabase Edge Function (Deno) — runs when the waitlist table changes.
 //
-// Triggered by a Database Webhook on INSERT into public.waitlist
-// (see docs/email-notifications.md). Not part of the Vite build.
+// On a new signup (INSERT) it:
+//   1. emails the ADMIN an alert, and
+//   2. emails the APPLICANT their auto-response:
+//        - University         → registration + discovery-call email (signed by Remi Kolawole)
+//        - Student (18+)      → "you're on the waitlist"
+//        - Parent / sponsor   → "you're on the waitlist"
+//        - Student UNDER 18   → NOTHING to the student. Their parent/guardian gets
+//                               a confirmation request instead.
+// When a parent confirms (UPDATE: parent_confirmed_at goes from empty to set),
+// the under-18 student gets their normal "you're on the waitlist" email.
+//
+// All via Resend, server-side, so the API key stays secret. Triggered by a
+// Database Webhook on public.waitlist for BOTH Insert and Update events
+// (see docs/p0-setup.md). Not part of the Vite build.
 //
 // Secrets (set with `supabase secrets set ...`):
 //   RESEND_API_KEY    — from resend.com
 //   NOTIFY_TO         — where the admin alert lands. One address, or a
 //                       comma-separated list to alert several inboxes.
-//   NOTIFY_FROM       — verified sender, e.g. "BloomAbroad <hello@yourdomain.com>"
-//                       (defaults to Resend's test sender — see note below)
+//   NOTIFY_FROM       — verified sender, e.g. "BloomAbroad <hello@bloomabroad.ie>"
 //   WEBHOOK_SECRET    — shared secret; webhook sends it as x-webhook-secret
-//   SEND_CONFIRMATION — set to "false" to disable the applicant confirmation
+//   SITE_URL          — where the parent's confirmation link points
+//                       (default https://bloomabroad.vercel.app)
+//   SEND_CONFIRMATION — set to "false" to disable applicant emails
 //   BOOKING_LINK      — 30-min call URL for the UNIVERSITY auto-response.
 //                       If unset, that email simply omits the booking button.
-//
-// NOTE: the applicant confirmation only reaches real inboxes once NOTIFY_FROM
-// is a verified domain. Resend's test sender (onboarding@resend.dev) only
-// delivers to your own account address.
 
 // @ts-nocheck  (Deno runtime globals aren't in the app's TS project)
 
@@ -27,9 +33,25 @@ interface WaitlistRecord {
   id: string
   name: string
   email: string
-  role: 'University' | 'Student'
+  role: 'University' | 'Student' | 'Parent'
   org: string | null
+  job_title: string | null
+  whatsapp: string | null
+  country: string | null
+  supporting: string | null
+  study_level: string | null
+  intended_start: string | null
+  age_band: string | null
+  parent_email: string | null
+  parent_confirmation_token: string | null
+  parent_confirmed_at: string | null
   created_at: string
+}
+
+interface WebhookPayload {
+  type?: 'INSERT' | 'UPDATE' | 'DELETE'
+  record?: WaitlistRecord
+  old_record?: Partial<WaitlistRecord> | null
 }
 
 const esc = (s: string) =>
@@ -46,6 +68,7 @@ const NOTIFY_TO = (Deno.env.get('NOTIFY_TO') ?? '')
 const NOTIFY_FROM =
   Deno.env.get('NOTIFY_FROM') ?? 'BloomAbroad <onboarding@resend.dev>'
 const SEND_CONFIRMATION = Deno.env.get('SEND_CONFIRMATION') !== 'false'
+const SITE_URL = (Deno.env.get('SITE_URL') ?? 'https://bloomabroad.vercel.app').replace(/\/$/, '')
 
 async function sendEmail(msg: {
   to: string | string[]
@@ -73,7 +96,7 @@ async function sendEmail(msg: {
   }
 }
 
-/* ------------------------------- templates ---------------------------- */
+/* ------------------------------- admin alert -------------------------- */
 
 const SHELL = (inner: string) => `
   <div style="font-family:Inter,Arial,sans-serif;background:#0f1210;padding:32px;color:#e9efe9">
@@ -85,28 +108,51 @@ const SHELL = (inner: string) => `
   </div>`
 
 function adminHtml(rec: WaitlistRecord) {
-  const org = rec.org && rec.org.trim() ? rec.org : '—'
   const when = new Date(rec.created_at).toLocaleString('en-GB', {
     dateStyle: 'medium',
     timeStyle: 'short',
   })
+  const underAge = rec.role === 'Student' && rec.age_band === 'Under 18'
+
+  // Only show the fields that apply to this role and were filled in.
+  const rows: [string, string | null][] = [
+    ['Category', rec.role],
+    ['Email', rec.email],
+    ['WhatsApp', rec.whatsapp],
+    ['Country', rec.country],
+    ['Institution', rec.org],
+    ['Job title', rec.job_title],
+    ['Supporting', rec.supporting],
+    ['Study level', rec.study_level],
+    ['Intended start', rec.intended_start],
+    ['Age', rec.age_band],
+    ['Parent email', rec.parent_email],
+    ['Submitted', when],
+  ]
+  const html = rows
+    .filter(([, v]) => v && String(v).trim())
+    .map(([k, v]) =>
+      k === 'Email'
+        ? `<tr><td style="padding:8px 0;color:#9aa79a;width:130px">${k}</td><td style="padding:8px 0"><a href="mailto:${esc(v!)}" style="color:#a3e635">${esc(v!)}</a></td></tr>`
+        : `<tr><td style="padding:8px 0;color:#9aa79a;width:130px">${k}</td><td style="padding:8px 0;color:${k === 'Category' ? '#fff' : '#e9efe9'};${k === 'Category' ? 'font-weight:600' : ''}">${esc(v!)}</td></tr>`,
+    )
+    .join('')
+
   return SHELL(`
     <p style="margin:0 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#a3e635">New waitlist signup</p>
     <h1 style="margin:0 0 20px;font-size:22px;color:#fff">${esc(rec.name)} joined the waitlist</h1>
-    <table style="width:100%;border-collapse:collapse;font-size:14px">
-      <tr><td style="padding:8px 0;color:#9aa79a;width:120px">Category</td><td style="padding:8px 0;color:#fff;font-weight:600">${esc(rec.role)}</td></tr>
-      <tr><td style="padding:8px 0;color:#9aa79a">Email</td><td style="padding:8px 0"><a href="mailto:${esc(rec.email)}" style="color:#a3e635">${esc(rec.email)}</a></td></tr>
-      <tr><td style="padding:8px 0;color:#9aa79a">Institution / Country of study</td><td style="padding:8px 0;color:#e9efe9">${esc(org)}</td></tr>
-      <tr><td style="padding:8px 0;color:#9aa79a">Submitted</td><td style="padding:8px 0;color:#e9efe9">${esc(when)}</td></tr>
-    </table>`)
+    ${underAge ? '<p style="margin:0 0 16px;padding:10px 12px;border-radius:8px;background:#2a2f2a;font-size:13px;color:#e9efe9">Under 18: we have emailed their parent or guardian for confirmation. The student gets no email until the parent confirms.</p>' : ''}
+    <table style="width:100%;border-collapse:collapse;font-size:14px">${html}</table>`)
 }
 
 /* ---------------------- applicant auto-responses ---------------------- */
-/* Content supplied by the client ("Email for Universities/Students.docx").
-   The same markup lives as standalone files in /emails for reuse in any
-   other sending tool. Light, table-based layout for email-client support. */
+/* Light, table-based layout for email-client support. The same markup lives
+   as standalone files in /emails for reuse in any other sending tool.
 
-const MAIL_SHELL = (preheader: string, inner: string) => `
+   Wording follows the brief: the product checks "application readiness and
+   immigration readiness"; "visa" appears only when describing the problem. */
+
+const MAIL_SHELL = (preheader: string, inner: string, footnote = FOOTNOTE) => `
 <body style="margin:0;padding:0;background-color:#F1F5F3;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${preheader}</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F1F5F3;">
@@ -121,17 +167,26 @@ const MAIL_SHELL = (preheader: string, inner: string) => `
         </td></tr>
         ${inner}
       </table>
+      <p style="margin:16px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#7C8A84;max-width:560px;">${footnote}</p>
     </td></tr>
   </table>
 </body>`
+
+/** Every applicant email ends with how to stop hearing from us (the privacy
+ *  notice promises withdrawal of consent at any time by email). */
+const FOOTNOTE =
+  'You received this because you joined the BloomAbroad waitlist. Don\'t want these updates? Email <a href="mailto:privacy@bloomabroad.ie" style="color:#0F6E56;">privacy@bloomabroad.ie</a> and we\'ll remove you.'
 
 const H2 = (t: string) =>
   `<h2 style="margin:0 0 8px 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;color:#085041;font-weight:bold;">${t}</h2>`
 const P = (t: string, mb = 22) =>
   `<p style="margin:0 0 ${mb}px 0;">${t}</p>`
 
+const firstName = (rec: WaitlistRecord) =>
+  esc(rec.name.trim().split(/\s+/)[0] || 'there')
+
 function universityHtml(rec: WaitlistRecord) {
-  const first = esc(rec.name.trim().split(/\s+/)[0] || 'there')
+  const first = firstName(rec)
   const booking = Deno.env.get('BOOKING_LINK') ?? ''
   const cta = booking
     ? `<tr><td style="padding:0 36px;">
@@ -154,7 +209,7 @@ function universityHtml(rec: WaitlistRecord) {
       ${P(`Dear ${first},`, 16)}
       ${P('Thank you for registering your interest in BloomAbroad.')}
       ${H2('What we are building')}
-      ${P('BloomAbroad is an enrolment readiness screening platform for international applications. Institutions submit applications they have already received, and the platform assesses whether the file is complete enough to assess, and whether the applicant is positioned to obtain a visa and complete the course.')}
+      ${P('BloomAbroad is an enrolment readiness screening platform for international applications. Institutions submit applications they have already received, and the platform assesses whether the file is complete enough to assess, and whether the applicant is positioned to meet immigration requirements and complete the course.')}
       ${H2('Why it matters')}
       ${P('Processing an international application that was never likely to convert carries a real cost — assessor time, administrative handling, and repeated correspondence. Where an offer is issued and the visa is not granted, the institution also loses the non-EU fee income and, late in the cycle, the opportunity to fill the place.', 12)}
       ${P('Screening earlier means that effort is directed toward applicants who can realistically enrol.')}
@@ -169,14 +224,15 @@ function universityHtml(rec: WaitlistRecord) {
     </td></tr>
     <tr><td style="padding:0 36px 30px 36px;border-top:1px solid #E3EAE7;">
       <p style="margin:22px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;color:#3C4B45;">Kind regards,</p>
-      <p style="margin:10px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#12261F;"><strong>Dr Niyi Kolawole</strong><br /><span style="color:#5B6B65;font-size:14px;">Co-Founder, BloomAbroad</span></p>
+      <p style="margin:10px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#12261F;"><strong>Remi Kolawole</strong><br /><span style="color:#5B6B65;font-size:14px;">Founder, BloomAbroad</span></p>
       <p style="margin:10px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;"><a href="https://bloomabroad.ie" style="color:#0F6E56;text-decoration:none;">bloomabroad.ie</a></p>
     </td></tr>`,
   )
 }
 
+/** Students (18+, or once a parent has confirmed) and parents/sponsors. */
 function studentHtml(rec: WaitlistRecord) {
-  const first = esc(rec.name.trim().split(/\s+/)[0] || 'there')
+  const first = firstName(rec)
   return MAIL_SHELL(
     "You're on the BloomAbroad waitlist — here's what we're building, and why.",
     `
@@ -192,7 +248,7 @@ function studentHtml(rec: WaitlistRecord) {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#E1F5EE;border-radius:10px;"><tr>
         <td style="padding:18px 20px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.65;color:#0F4A3A;">
           <strong style="color:#085041;">BloomAbroad is designed to spot it.</strong><br />
-          It checks your <strong>application readiness</strong> (are you positioned to get an offer?) and your <strong>visa readiness</strong> (are you positioned to meet immigration requirements?). Together that's your <strong>enrolment readiness</strong> — where you actually stand, before you commit your time, effort and money.
+          It checks your <strong>application readiness</strong> (are you positioned to get an offer?) and your <strong>immigration readiness</strong> (are you positioned to meet immigration requirements?). Together that's your <strong>enrolment readiness</strong> — where you actually stand, before you commit your time, effort and money.
         </td>
       </tr></table>
     </td></tr>
@@ -209,6 +265,42 @@ function studentHtml(rec: WaitlistRecord) {
   )
 }
 
+/** Sent to the parent/guardian of an under-18 sign-up. NOTE: the wording of
+ *  this email was drafted for the developer handover (the brief specifies the
+ *  flow but not the copy) — have Remi approve it before it goes live. */
+function parentConfirmHtml(rec: WaitlistRecord, link: string) {
+  const student = firstName(rec)
+  return MAIL_SHELL(
+    `${student} has joined the BloomAbroad waitlist and needs your OK.`,
+    `
+    <tr><td style="padding:16px 36px 0 36px;">
+      <p style="margin:0 0 6px 0;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#1D9E75;font-weight:bold;">Parent or guardian confirmation</p>
+      <h1 style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:24px;line-height:1.3;color:#12261F;font-weight:bold;">Please confirm ${student}'s place on the waitlist</h1>
+    </td></tr>
+    <tr><td style="padding:22px 36px 0 36px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:#3C4B45;">
+      ${P('Hello,', 16)}
+      ${P(`${student} has joined the BloomAbroad waitlist and gave us your email address as their parent or guardian. Because they're under 18, we need your OK before we send them anything.`, 16)}
+      ${P("BloomAbroad is an independent readiness check for students planning to study in Ireland. It shows a student where they stand before they apply. We're not an agent, we take no commission, and we never sell personal information.", 22)}
+    </td></tr>
+    <tr><td style="padding:0 36px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td style="background-color:#085041;border-radius:999px;">
+          <a href="${esc(link)}" style="display:inline-block;padding:13px 26px;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:bold;color:#FFFFFF;text-decoration:none;">Yes, that's fine — confirm</a>
+        </td>
+      </tr></table>
+    </td></tr>
+    <tr><td style="padding:22px 36px 0 36px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:#3C4B45;">
+      ${P(`If you don't recognise this, or you'd rather ${student} wasn't on the waitlist, just ignore this email and we won't contact them. To have their details removed, email <a href="mailto:privacy@bloomabroad.ie" style="color:#0F6E56;">privacy@bloomabroad.ie</a>.`, 26)}
+    </td></tr>
+    <tr><td style="padding:0 36px 30px 36px;border-top:1px solid #E3EAE7;">
+      <p style="margin:22px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;color:#3C4B45;">Kind regards,</p>
+      <p style="margin:10px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#12261F;"><strong>The BloomAbroad Team</strong></p>
+      <p style="margin:10px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;"><a href="https://bloomabroad.ie" style="color:#0F6E56;text-decoration:none;">bloomabroad.ie</a></p>
+    </td></tr>`,
+    'You received this because someone entered your email address as their parent or guardian on the BloomAbroad waitlist. Questions? Email <a href="mailto:privacy@bloomabroad.ie" style="color:#0F6E56;">privacy@bloomabroad.ie</a>.',
+  )
+}
+
 /* -------------------------------- handler ----------------------------- */
 
 Deno.serve(async (req) => {
@@ -219,7 +311,7 @@ Deno.serve(async (req) => {
   }
 
   // 2. Parse the webhook payload.
-  let payload: { type?: string; record?: WaitlistRecord }
+  let payload: WebhookPayload
   try {
     payload = await req.json()
   } catch {
@@ -232,7 +324,31 @@ Deno.serve(async (req) => {
     return new Response('Missing RESEND_API_KEY or NOTIFY_TO', { status: 500 })
   }
 
-  // 3. Admin alert (primary — its failure is reported).
+  // 3a. UPDATE: only act when a parent has just confirmed an under-18 sign-up.
+  //     The student now gets the normal waitlist email.
+  if (payload.type === 'UPDATE') {
+    const justConfirmed =
+      Boolean(rec.parent_confirmed_at) && !payload.old_record?.parent_confirmed_at
+    if (justConfirmed && SEND_CONFIRMATION) {
+      try {
+        await sendEmail({
+          to: rec.email,
+          subject: "You're on the waitlist",
+          html: studentHtml(rec),
+        })
+      } catch (e) {
+        console.error('Post-confirmation email failed (non-fatal):', e)
+      }
+    }
+    return new Response('ok', { status: 200 })
+  }
+
+  // Anything other than a new signup (e.g. a delete) needs no email.
+  if (payload.type && payload.type !== 'INSERT') {
+    return new Response('ignored', { status: 200 })
+  }
+
+  // 3b. INSERT — admin alert (primary: its failure is reported).
   try {
     await sendEmail({
       to: NOTIFY_TO,
@@ -246,19 +362,34 @@ Deno.serve(async (req) => {
   }
 
   // 4. Applicant auto-response (best-effort — never blocks the signup).
-  //    Content differs by category, per the client's supplied copy.
   if (SEND_CONFIRMATION) {
-    const isUni = rec.role === 'University'
+    const underAge = rec.role === 'Student' && rec.age_band === 'Under 18'
     try {
-      await sendEmail({
-        to: rec.email,
-        subject: isUni
-          ? 'Your BloomAbroad registration is confirmed'
-          : "You're on the waitlist",
-        html: isUni ? universityHtml(rec) : studentHtml(rec),
-      })
+      if (underAge) {
+        // Nothing goes to the student until their parent/guardian confirms.
+        if (rec.parent_email && rec.parent_confirmation_token) {
+          const link = `${SITE_URL}/confirm?token=${encodeURIComponent(rec.parent_confirmation_token)}`
+          await sendEmail({
+            to: rec.parent_email,
+            subject: `Please confirm ${rec.name.trim().split(/\s+/)[0]}'s place on the BloomAbroad waitlist`,
+            html: parentConfirmHtml(rec, link),
+          })
+        }
+      } else if (rec.role === 'University') {
+        await sendEmail({
+          to: rec.email,
+          subject: 'Your BloomAbroad registration is confirmed',
+          html: universityHtml(rec),
+        })
+      } else {
+        await sendEmail({
+          to: rec.email,
+          subject: "You're on the waitlist",
+          html: studentHtml(rec),
+        })
+      }
     } catch (e) {
-      console.error('Confirmation email failed (non-fatal):', e)
+      console.error('Applicant email failed (non-fatal):', e)
     }
   }
 

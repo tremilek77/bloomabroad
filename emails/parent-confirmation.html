@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <title>Please confirm {{STUDENT_FIRST_NAME}}'s place on the BloomAbroad waitlist</title>
+  </head>
+  <!--
+    BloomAbroad — sent to the PARENT/GUARDIAN of an under-18 waitlist sign-up.
+    Nothing is sent to the student until the parent confirms.
+
+    Subject: Please confirm {{STUDENT_FIRST_NAME}}'s place on the BloomAbroad waitlist
+
+    Placeholders to replace when sending:
+      {{STUDENT_FIRST_NAME}} — the student's first name
+      {{CONFIRM_LINK}}       — https://<site>/confirm?token=<parent_confirmation_token>
+
+    NOTE: the brief specifies this flow but not the wording. This copy was
+    drafted for the developer handover — Remi should approve it.
+    Table-based + inline styles for Outlook/Gmail compatibility.
+  -->
+  <body style="margin:0; padding:0; background-color:#F1F5F3;">
+    <div style="display:none; max-height:0; overflow:hidden; opacity:0;">
+      {{STUDENT_FIRST_NAME}} has joined the BloomAbroad waitlist and needs your OK.
+    </div>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F1F5F3;">
+      <tr>
+        <td align="center" style="padding:32px 16px;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:100%; background-color:#FFFFFF; border-radius:14px; overflow:hidden; border:1px solid #E3EAE7;">
+
+            <tr>
+              <td style="height:4px; background-color:#1D9E75; font-size:0; line-height:0;">&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td style="padding:28px 36px 8px 36px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="width:34px; height:34px; background-color:#E1F5EE; border-radius:8px; text-align:center; vertical-align:middle; font-family:Helvetica,Arial,sans-serif; font-size:12px; font-weight:bold; color:#085041;">BA</td>
+                    <td style="padding-left:10px; font-family:Helvetica,Arial,sans-serif; font-size:17px; font-weight:bold; color:#085041;">BloomAbroad</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:16px 36px 0 36px;">
+                <p style="margin:0 0 6px 0; font-family:Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:#1D9E75; font-weight:bold;">Parent or guardian confirmation</p>
+                <h1 style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:24px; line-height:1.3; color:#12261F; font-weight:bold;">Please confirm {{STUDENT_FIRST_NAME}}'s place on the waitlist</h1>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:22px 36px 0 36px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.7; color:#3C4B45;">
+                <p style="margin:0 0 16px 0;">Hello,</p>
+                <p style="margin:0 0 16px 0;">{{STUDENT_FIRST_NAME}} has joined the BloomAbroad waitlist and gave us your email address as their parent or guardian. Because they're under 18, we need your OK before we send them anything.</p>
+                <p style="margin:0 0 22px 0;">BloomAbroad is an independent readiness check for students planning to study in Ireland. It shows a student where they stand before they apply. We're not an agent, we take no commission, and we never sell personal information.</p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:0 36px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="background-color:#085041; border-radius:999px;">
+                      <a href="{{CONFIRM_LINK}}" style="display:inline-block; padding:13px 26px; font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:#FFFFFF; text-decoration:none;">Yes, that's fine — confirm</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:22px 36px 0 36px; font-family:Helvetica,Arial,sans-serif; font-size:14px; line-height:1.7; color:#3C4B45;">
+                <p style="margin:0 0 26px 0;">If you don't recognise this, or you'd rather {{STUDENT_FIRST_NAME}} wasn't on the waitlist, just ignore this email and we won't contact them. To have their details removed, email <a href="mailto:privacy@bloomabroad.ie" style="color:#0F6E56;">privacy@bloomabroad.ie</a>.</p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:0 36px 30px 36px; border-top:1px solid #E3EAE7;">
+                <p style="margin:22px 0 0 0; font-family:Helvetica,Arial,sans-serif; font-size:15px; color:#3C4B45;">Kind regards,</p>
+                <p style="margin:10px 0 0 0; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:1.5; color:#12261F;"><strong>The BloomAbroad Team</strong></p>
+                <p style="margin:10px 0 0 0; font-family:Helvetica,Arial,sans-serif; font-size:14px;">
+                  <a href="https://bloomabroad.ie" style="color:#0F6E56; text-decoration:none;">bloomabroad.ie</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+
+          <p style="margin:16px 0 0 0; font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:1.6; color:#7C8A84; max-width:560px;">
+            You received this because someone entered your email address as their parent or guardian on the BloomAbroad waitlist. Questions? Email <a href="mailto:privacy@bloomabroad.ie" style="color:#0F6E56;">privacy@bloomabroad.ie</a>.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

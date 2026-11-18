@@ -6,6 +6,7 @@ import {
   Building2,
   Download,
   GraduationCap,
+  Heart,
   Loader2,
   LogOut,
   RefreshCw,
@@ -81,6 +82,7 @@ export function AdminPage() {
       all: entries.length,
       University: entries.filter((e) => e.role === 'University').length,
       Student: entries.filter((e) => e.role === 'Student').length,
+      Parent: entries.filter((e) => e.role === 'Parent').length,
     }),
     [entries],
   )
@@ -90,11 +92,8 @@ export function AdminPage() {
     return entries.filter((e) => {
       if (filter !== 'all' && e.role !== filter) return false
       if (!q) return true
-      return (
-        e.name.toLowerCase().includes(q) ||
-        e.email.toLowerCase().includes(q) ||
-        (e.org ?? '').toLowerCase().includes(q)
-      )
+      return [e.name, e.email, e.org, e.country, e.jobTitle, e.whatsapp, e.parentEmail]
+        .some((v) => (v ?? '').toLowerCase().includes(q))
     })
   }, [entries, filter, query])
 
@@ -169,7 +168,7 @@ export function AdminPage() {
             </h1>
             <p className="text-sm text-muted-foreground">
               {counts.all} total · {counts.University} universities ·{' '}
-              {counts.Student} students
+              {counts.Student} students · {counts.Parent} parents &amp; sponsors
             </p>
           </div>
 
@@ -224,6 +223,13 @@ export function AdminPage() {
                 label="Students"
                 count={counts.Student}
               />
+              <FilterTab
+                active={filter === 'Parent'}
+                onClick={() => setFilter('Parent')}
+                icon={<Heart className="h-4 w-4" />}
+                label="Parents & sponsors"
+                count={counts.Parent}
+              />
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -261,15 +267,16 @@ export function AdminPage() {
           {/* table */}
           <div className="mt-5 overflow-hidden rounded-2xl border border-border">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+              <table className="w-full min-w-[860px] border-collapse text-left text-sm">
                 <thead>
                   <tr className="border-b border-border bg-secondary/40 text-xs uppercase tracking-wide text-muted-foreground">
                     <th className="px-4 py-3 font-semibold">Name</th>
                     <th className="px-4 py-3 font-semibold">Email</th>
                     <th className="px-4 py-3 font-semibold">Category</th>
                     <th className="px-4 py-3 font-semibold">
-                      Institution / Country of study
+                      Institution / Country
                     </th>
+                    <th className="px-4 py-3 font-semibold">Details</th>
                     <th className="px-4 py-3 font-semibold">Submitted</th>
                   </tr>
                 </thead>
@@ -289,7 +296,17 @@ export function AdminPage() {
                         <RoleBadge role={e.role} />
                       </td>
                       <td className="px-4 py-3 text-muted-foreground">
-                        {e.org || <span className="opacity-50">—</span>}
+                        {(e.role === 'University' ? e.org : e.country) || (
+                          <span className="opacity-50">—</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+                        {details(e).map((line) => (
+                          <div key={line}>{line}</div>
+                        ))}
+                        {details(e).length === 0 && (
+                          <span className="opacity-50">—</span>
+                        )}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
                         {new Date(e.createdAt).toLocaleDateString()}{' '}
@@ -464,10 +481,34 @@ function RoleBadge({ role }: { role: Audience }) {
     >
       {isUni ? (
         <Building2 className="h-3 w-3" />
+      ) : role === 'Parent' ? (
+        <Heart className="h-3 w-3" />
       ) : (
         <GraduationCap className="h-3 w-3" />
       )}
       {role}
     </span>
   )
+}
+
+/** The role-specific fields, one short line each, for the admin table. */
+function details(e: WaitlistEntry): string[] {
+  const lines: string[] = []
+  if (e.role === 'University') {
+    if (e.jobTitle) lines.push(e.jobTitle)
+    return lines
+  }
+  if (e.supporting) lines.push(`Supporting: ${e.supporting}`)
+  const plan = [e.studyLevel, e.intendedStart].filter(Boolean).join(' · ')
+  if (plan) lines.push(plan)
+  if (e.ageBand) lines.push(`Age ${e.ageBand}`)
+  if (e.ageBand === 'Under 18') {
+    lines.push(
+      e.parentConfirmedAt
+        ? `Parent confirmed (${e.parentEmail})`
+        : `Parent NOT yet confirmed (${e.parentEmail})`,
+    )
+  }
+  if (e.whatsapp) lines.push(`WhatsApp ${e.whatsapp}`)
+  return lines
 }

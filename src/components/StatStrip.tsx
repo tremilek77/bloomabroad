@@ -1,10 +1,12 @@
 import { Reveal } from './saasta/Reveal'
 
+// The one stats block on the page (the duplicate lower block was removed).
+// Final values are plain text in the HTML — nothing here animates from 0.
 const STATS = [
-  { value: '10+ years', label: 'Real application, admissions & outcome data' },
+  { value: '10+ years', label: 'of real application, admissions and outcome data' },
   {
-    value: 'Validated with HEIs admissions teams',
-    label: 'Confirmed to address challenges they face today',
+    value: 'Validated with university admissions teams',
+    label: 'Confirmed to address the challenges they face today',
   },
 ]
 

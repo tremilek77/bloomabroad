@@ -31,11 +31,19 @@ function scrollToTop() {
   el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
 }
 
+/** Lets other pages deep-link to a branch, e.g. "/?audience=students". */
+function audienceFromUrl(): Audience | null {
+  if (typeof window === 'undefined') return null
+  const a = new URLSearchParams(window.location.search).get('audience')
+  return a === 'students' || a === 'universities' ? a : null
+}
+
 export function AudienceProvider({ children }: { children: ReactNode }) {
+  const [fromUrl] = useState(audienceFromUrl)
   // `audience` defaults to 'universities' so the follow-up sections (and the
   // prerender snapshot) have real content even before a choice is made.
-  const [audience, setAudience] = useState<Audience>('universities')
-  const [chosen, setChosen] = useState(false)
+  const [audience, setAudience] = useState<Audience>(fromUrl ?? 'universities')
+  const [chosen, setChosen] = useState(fromUrl !== null)
 
   function choose(a: Audience) {
     setAudience(a)
@@ -55,6 +63,12 @@ export function AudienceProvider({ children }: { children: ReactNode }) {
       {children}
     </AudienceContext.Provider>
   )
+}
+
+/** Like useAudience, but returns null outside an AudienceProvider — for
+ *  shared pieces (the footer) that also render on pages with no audience. */
+export function useOptionalAudience() {
+  return useContext(AudienceContext)
 }
 
 export function useAudience() {

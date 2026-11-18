@@ -272,6 +272,8 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Set by the cookie banner (CookieConsent) so it never covers page text. */
+  padding-bottom: var(--cookie-bar-h, 0px);
 }
 
 .font-serif {

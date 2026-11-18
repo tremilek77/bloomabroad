@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 
 /**
- * Count-up number that animates from 0 → value when scrolled into view.
- * IntersectionObserver + rAF (reliable here, unlike motion's whileInView).
- * Respects prefers-reduced-motion (shows final value immediately).
+ * Count-up number. The FINAL value is what's rendered in the HTML (and what
+ * no-JS visitors, crawlers and reduced-motion users see), so the page can
+ * never show a placeholder like "0+ years". When it scrolls into view it
+ * does a short count-up that ends on that number — starting from a floor
+ * above zero, never from 0.
  */
 export function Counter({
   value,
-  duration = 1500,
+  duration = 1200,
   decimals = 0,
   prefix = '',
   suffix = '',
@@ -22,17 +24,18 @@ export function Counter({
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const started = useRef(false)
-  const [display, setDisplay] = useState(0)
+  const [display, setDisplay] = useState(value)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduce || typeof IntersectionObserver === 'undefined') {
-      setDisplay(value)
-      return
-    }
+    if (reduce || typeof IntersectionObserver === 'undefined') return
+
+    // Count up from ~70% of the target, so it visibly climbs but never
+    // passes through 0 (or anything that reads as a different number).
+    const from = value * 0.7
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -42,7 +45,7 @@ export function Counter({
           const step = (now: number) => {
             const t = Math.min(1, (now - start) / duration)
             const eased = 1 - Math.pow(1 - t, 3) // easeOutCubic
-            setDisplay(value * eased)
+            setDisplay(from + (value - from) * eased)
             if (t < 1) requestAnimationFrame(step)
             else setDisplay(value)
           }
@@ -54,15 +57,7 @@ export function Counter({
     )
     io.observe(el)
 
-    // Safety: reveal final value if IO never fires.
-    const fallback = window.setTimeout(() => {
-      if (!started.current) setDisplay(value)
-    }, 1500)
-
-    return () => {
-      io.disconnect()
-      window.clearTimeout(fallback)
-    }
+    return () => io.disconnect()
   }, [value, duration])
 
   const shown =
