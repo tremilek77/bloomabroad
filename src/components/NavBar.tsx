@@ -13,7 +13,7 @@ export function NavBar() {
   // Pages with their own waitlist form scroll to it; every other page sends
   // the visitor to the homepage's form.
   const { pathname } = useLocation()
-  const hasForm = pathname === '/' || pathname === '/students' || pathname === '/universities'
+  const hasForm = ['/', '/students', '/universities', '/pricing', '/nigeria'].includes(pathname)
   const joinHref = hasForm ? '#waitlist' : '/#waitlist'
   const isUni = pathname === '/universities'
   const joinLabel = (

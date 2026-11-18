@@ -5,4 +5,4 @@ import { readFileSync } from 'node:fs'
 const src = readFileSync(new URL('../../src/content/site.ts', import.meta.url), 'utf8')
 
 /** True if `flag` is switched on in the READY block. */
-export const isReady = (flag) => new RegExp(`\b${flag}:\s*true\b`).test(src)
+export const isReady = (flag) => new RegExp(String.raw`\b${flag}:\s*true\b`).test(src)

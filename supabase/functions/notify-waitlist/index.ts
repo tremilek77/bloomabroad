@@ -380,7 +380,9 @@ const welcomeFor = (rec: WaitlistRecord) =>
 Deno.serve(async (req) => {
   // 1. Verify the shared secret set on the webhook.
   const secret = Deno.env.get('WEBHOOK_SECRET')
-  if (secret && req.headers.get('x-webhook-secret') !== secret) {
+  // Fail closed: the function is public (--no-verify-jwt), so without a secret
+  // anyone could post a forged payload and make us email arbitrary addresses.
+  if (!secret || req.headers.get('x-webhook-secret') !== secret) {
     return new Response('Unauthorized', { status: 401 })
   }
 

@@ -45,6 +45,24 @@ create policy "public can insert"
   to anon, authenticated
   with check (parent_confirmed_at is null);
 
+-- Public clients can't choose their own confirmation token or pre-confirm:
+-- both are always set by the database on insert.
+create or replace function public.waitlist_reset_confirmation()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.parent_confirmation_token := gen_random_uuid();
+  new.parent_confirmed_at := null;
+  return new;
+end;
+$$;
+
+drop trigger if exists waitlist_reset_confirmation on public.waitlist;
+create trigger waitlist_reset_confirmation
+  before insert on public.waitlist
+  for each row execute function public.waitlist_reset_confirmation();
+
 -- ---------------------------------------------------------------------
 -- 2. Parent confirmation (under-18 students)
 -- ---------------------------------------------------------------------

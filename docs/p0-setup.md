@@ -51,6 +51,10 @@ Supabase → Database → Webhooks → the `waitlist` webhook → tick **Insert*
 (table `public.waitlist`, header `x-webhook-secret`). Update is what sends the student
 their email after a parent confirms. Without it, under-18 students never get one.
 
+`WEBHOOK_SECRET` is **required**: the function rejects every request if the secret is not
+set, or if the webhook's `x-webhook-secret` header doesn't match it. Set the same value in
+both places (`supabase secrets set WEBHOOK_SECRET=...` and the webhook header).
+
 ### 4. Merge `p0-compliance` → `main`
 
 Vercel deploys `main` automatically. The build prints a warning listing any unfilled placeholders.

@@ -190,6 +190,8 @@ export async function confirmParent(token: string): Promise<ParentConfirmation> 
 /* -------------------------------- CSV --------------------------------- */
 
 function csvCell(value: string): string {
+  // Stop spreadsheet formulas: a leading = + - @ tab or CR gets a quote prefix.
+  if (/^[=+\-@\t\r]/.test(value)) value = `'${value}`
   // RFC 4180: wrap in quotes if it contains comma, quote, or newline.
   if (/[",\n\r]/.test(value)) return `"${value.replace(/"/g, '""')}"`
   return value
