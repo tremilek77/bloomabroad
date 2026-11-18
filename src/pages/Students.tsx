@@ -198,6 +198,14 @@ export function StudentsPage() {
       </Section>
 
       <Disclaimer variant="short" />
+      <p className="pb-2 text-center">
+        <Link
+          to="/nigeria"
+          className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
+        >
+          Applying from Nigeria? See our Nigeria page →
+        </Link>
+      </p>
       {READY.verify && (
         <p className="-mt-3 pb-6 text-center">
           <Link

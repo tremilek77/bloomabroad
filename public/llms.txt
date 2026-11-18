@@ -11,6 +11,7 @@ BloomAbroad does not make admission, visa or immigration decisions, and no outco
 ## Key pages
 - [For students and families](https://bloomabroad.vercel.app/students): what the readiness check covers, how it works, FAQs
 - [For universities](https://bloomabroad.vercel.app/universities): enrolment readiness screening for international applications
+- [Studying in Ireland from Nigeria](https://bloomabroad.vercel.app/nigeria): readiness check for Nigerian students, with prices in naira
 - [Pricing](https://bloomabroad.vercel.app/pricing): Readiness Assessment €30, Plus €65, founding prices, local prices in naira, shillings and cedis
 - [Free Ireland Readiness Checklist](https://bloomabroad.vercel.app/checklist): a free 2-minute quiz that returns a personal list of what to prepare. It is not an assessment
 - [How to verify it's really us](https://bloomabroad.vercel.app/verify): our only websites, email addresses and payment method

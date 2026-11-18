@@ -9,7 +9,7 @@ import { CountryOptions, Field, Select, inputCls } from '@/components/form/field
 import { usePageMeta } from '@/lib/seo'
 import { useSchema, webPageNode } from '@/lib/schema'
 import { addEntry } from '@/lib/waitlist'
-import { OTHER_COUNTRY } from '@/lib/countries'
+import { COUNTRY_GROUPS, OTHER_COUNTRY } from '@/lib/countries'
 import { AGE_BANDS, CONSENT_TEXT } from '@/content/formOptions'
 import { QUESTIONS, buildChecklist, type Answers } from '@/content/checklist'
 import { cn } from '@/lib/utils'
@@ -40,7 +40,14 @@ export function ChecklistPage() {
   useSchema('page', [webPageNode(PATH, TITLE, DESCRIPTION)])
 
   const [step, setStep] = useState(0)
-  const [answers, setAnswers] = useState<Answers>({})
+  // A country page can send people here with the country already chosen (?country=Nigeria).
+  const [answers, setAnswers] = useState<Answers>((): Answers => {
+    const c = new URLSearchParams(window.location.search).get('country')
+    const known = COUNTRY_GROUPS.some((g) => g.countries.includes(c ?? ''))
+    const start: Answers = {}
+    if (known && c) start.q2 = c
+    return start
+  })
   const [countryOther, setCountryOther] = useState('')
   const [contact, setContact] = useState<Contact>({
     name: '',

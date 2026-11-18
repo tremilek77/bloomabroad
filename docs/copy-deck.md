@@ -258,7 +258,7 @@ University FAQs (`/universities`). Visible: 1, 2, 3, 4, 5.
 - **Title:** Study in Ireland from Nigeria: Readiness Check | BloomAbroad
 - **Meta:** Studying in Ireland from Nigeria? Check your application and immigration readiness before you apply. Priced in naira, every result reviewed by a consultant.
 - **H1:** Studying in Ireland from Nigeria? Know where you stand before you apply
-- **Answer:** BloomAbroad checks your application readiness and immigration readiness for studying in Ireland, with every result reviewed by an experienced consultant. The Readiness Assessment costs ₦49,000, or ₦29,000 for the first 100 waitlist members. You find out where you stand before you apply.
+- **Answer:** BloomAbroad checks your application readiness and immigration readiness for studying in Ireland, with every result reviewed by an experienced consultant. The Readiness Assessment costs approximately ₦49,000, or approximately ₦29,000 for the first 100 waitlist members. You find out where you stand before you apply.
 - **Buttons:** `Join the waitlist` · `Get the free checklist`
 - **Cards:** Why check first (one line) · Priced in naira (₦49,000 · Plus ₦99,000 · founding ₦29,000 and ₦59,000) · Planning for September 2027? Many Irish courses recruit on a rolling basis, so the earlier you know where you stand, the more options you keep.
 - **Founder line:** Founded by Remi Kolawole, from Nigeria and living in Ireland for over two decades. `Meet the team →`

@@ -119,6 +119,8 @@ type FormValues = z.infer<typeof schema>
 type WaitlistFormProps = {
   /** Role to start on (e.g. Student on /students). The visitor can change it. */
   defaultRole?: Role
+  /** Country to start on (country pages). The visitor can change it. */
+  defaultCountry?: string
   eyebrow?: string
   heading?: React.ReactNode
   lead?: string
@@ -126,6 +128,7 @@ type WaitlistFormProps = {
 
 export function WaitlistForm({
   defaultRole,
+  defaultCountry,
   eyebrow = 'Join the waitlist',
   heading = <span className="text-glimmer">Be first in line</span>,
   lead = 'BloomAbroad launches in early 2027, starting with Ireland.',
@@ -145,7 +148,7 @@ export function WaitlistForm({
       name: '',
       email: '',
       whatsapp: '',
-      country: '',
+      country: defaultCountry ?? '',
       countryOther: '',
       supporting: '',
       studyLevel: '',

@@ -21,6 +21,7 @@ const PAGES = [
   { file: 'students.html', route: '/students', marketing: true },
   { file: 'universities.html', route: '/universities', marketing: true },
   { file: 'checklist.html', route: '/checklist', marketing: true },
+  { file: 'nigeria.html', route: '/nigeria', marketing: true },
   { file: 'pricing.html', route: '/pricing', marketing: true },
   { file: 'verify.html', route: '/verify', marketing: true },
   { file: 'privacy.html', route: '/privacy' },

@@ -150,6 +150,11 @@ export function PricingPage() {
               </button>
             ))}
           </div>
+          {cur === 'ngn' && (
+            <Link to="/nigeria" className="text-sm font-semibold text-primary underline-offset-4 hover:underline">
+              Studying from Nigeria? See our Nigeria page →
+            </Link>
+          )}
           {cur !== 'eur' && !LOCAL_PRICES_CONFIRMED && (
             <p className="max-w-xl text-center text-sm text-muted-foreground">
               Local prices are approximate. Checkout is in euro, and you'll always see the
