@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { BloomMark } from './Logo'
 import { READY } from '@/content/site'
+import { hasGuides } from '@/content/guides'
 import { openCookieSettings } from '@/lib/consent'
 import { COMPANY, SOCIALS } from '@/lib/company'
 
@@ -17,6 +18,7 @@ const SITE_LINKS: { label: string; href: string; ready: boolean }[] = [
   { label: 'Pricing', href: '/pricing', ready: READY.pricing },
   { label: 'How it works', href: '/students#how', ready: true },
   { label: 'FAQs', href: '/students#faq', ready: true },
+  { label: 'Guides', href: '/guides', ready: hasGuides },
   { label: 'Contact', href: '/contact', ready: true },
   { label: "Verify it's us", href: '/verify', ready: READY.verify },
 ]

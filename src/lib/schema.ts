@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { COMPANY, SITE_URL, SOCIALS } from './company'
-import { FOUNDER } from '@/content/site'
+import { FOUNDER, METHODOLOGY_ADVISER } from '@/content/site'
 import type { Faq } from '@/content/faqs'
 
 /**
@@ -13,6 +13,7 @@ import type { Faq } from '@/content/faqs'
 export const ORG_ID = `${SITE_URL}/#organization`
 export const WEBSITE_ID = `${SITE_URL}/#website`
 export const FOUNDER_ID = `${SITE_URL}/#founder`
+export const ADVISER_ID = `${SITE_URL}/#adviser`
 
 export function organizationNode() {
   return {
@@ -41,6 +42,18 @@ export function founderNode() {
   }
 }
 
+/** The Methodology Adviser: the named author of every guide. */
+export function adviserNode() {
+  return {
+    '@type': 'Person',
+    '@id': ADVISER_ID,
+    name: METHODOLOGY_ADVISER.name,
+    jobTitle: METHODOLOGY_ADVISER.title,
+    alumniOf: { '@type': 'CollegeOrUniversity', name: 'University College Cork' },
+    worksFor: { '@id': ORG_ID },
+  }
+}
+
 export function websiteNode() {
   return {
     '@type': 'WebSite',
@@ -61,6 +74,38 @@ export function faqNode(path: string, items: Faq[]) {
       '@type': 'Question',
       name: f.q,
       acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  }
+}
+
+/** A guide, with the author and the last-reviewed date as dateModified. */
+export function articleNode(
+  path: string,
+  g: { h1: string; description: string; datePublished: string; reviewed: string },
+) {
+  return {
+    '@type': 'Article',
+    '@id': `${SITE_URL}${path}#article`,
+    headline: g.h1,
+    description: g.description,
+    datePublished: g.datePublished,
+    dateModified: g.reviewed,
+    author: { '@id': ADVISER_ID },
+    publisher: { '@id': ORG_ID },
+    mainEntityOfPage: `${SITE_URL}${path}`,
+    inLanguage: 'en-IE',
+  }
+}
+
+/** Breadcrumbs. Only use where the same trail is visible on the page. */
+export function breadcrumbNode(crumbs: { name: string; path: string }[]) {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: `${SITE_URL}${c.path}`,
     })),
   }
 }

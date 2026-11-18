@@ -21,4 +21,6 @@ export const FOUNDER = {
 export const METHODOLOGY_ADVISER = {
   name: 'Dr Olaniyi Kolawole',
   title: 'Methodology Adviser',
+  /** Shown in every guide byline (brief, Fix 14). */
+  credential: 'PhD, University College Cork',
 } as const

@@ -9,6 +9,7 @@
 
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
+import { loadGuides } from './lib/guides.mjs'
 import { fileURLToPath } from 'node:url'
 
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'dist')
@@ -27,6 +28,14 @@ const PAGES = [
   { file: 'complaints.html', route: '/complaints' },
   { file: 'cookies.html', route: '/cookies' },
 ]
+
+// The hub and every published guide are marketing pages too.
+{
+  const guides = loadGuides({ includeDrafts: false })
+  if (guides.length) PAGES.push({ file: 'guides.html', route: '/guides', marketing: true })
+  for (const g of guides)
+    PAGES.push({ file: `guides/${g.slug}.html`, route: `/guides/${g.slug}`, marketing: true })
+}
 
 const BANNED = [
   [/AI[- ](driven|powered)/gi, 'no "AI-driven" language'],

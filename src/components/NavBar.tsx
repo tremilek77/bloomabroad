@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react'
 import { BloomMark } from './Logo'
 import { ThemeToggle } from './saasta/ThemeToggle'
 import { READY } from '@/content/site'
+import { hasGuides } from '@/content/guides'
 
 const navCls =
   'nav-underline text-base font-medium text-muted-foreground transition-colors hover:text-foreground'
@@ -31,6 +32,7 @@ export function NavBar() {
     { to: '/universities', label: 'For universities' },
     { to: '/students#how', label: 'How it works' },
     ...(READY.pricing ? [{ to: '/pricing', label: 'Pricing' }] : []),
+    ...(hasGuides ? [{ to: '/guides', label: 'Guides' }] : []),
   ]
 
   return (

@@ -25,9 +25,10 @@
 // content) if it turns out to be noticeable in practice.
 
 import { createServer } from 'node:http'
-import { readFile, writeFile, stat } from 'node:fs/promises'
+import { readFile, writeFile, stat, mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { loadGuides, showDraftsFromEnv } from './lib/guides.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(__dirname, '..', 'dist')
@@ -123,6 +124,18 @@ const ROUTES = [
   { route: '/old', file: 'old.html', expect: 'archived copy', settle: 2000 },
 ]
 
+// The guides hub, and one page per guide. Drafts are rendered only on preview
+// builds (VITE_SHOW_DRAFTS=1), exactly as the site itself includes them.
+ROUTES.push({ route: '/guides', file: 'guides.html', expect: 'in plain English', settle: 1500 })
+for (const g of loadGuides({ includeDrafts: showDraftsFromEnv() })) {
+  ROUTES.push({
+    route: `/guides/${g.slug}`,
+    file: `guides/${g.slug}.html`,
+    expect: 'Last reviewed',
+    settle: 1500,
+  })
+}
+
 /** Render one route and return its final HTML. Throws if it looks wrong. */
 async function renderRoute(browser, baseUrl, { route, expect, settle }) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 2400 } })
@@ -187,6 +200,7 @@ async function main() {
   let ok = 0
   for (const { spec, html } of results) {
     if (!html) continue
+    await mkdir(path.dirname(path.join(distDir, spec.file)), { recursive: true })
     await writeFile(path.join(distDir, spec.file), html, 'utf8')
     console.log(
       `[prerender] ✓ ${spec.route} -> dist/${spec.file} (${html.length.toLocaleString()} chars)`,

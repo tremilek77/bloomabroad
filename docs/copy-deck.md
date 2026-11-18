@@ -342,3 +342,10 @@ and a new site has no data for weeks, so start the clock today.
 - **Rules and wording:** `supabase/functions/_shared/checklist.json` (one file read by the site and the email).
 - **Under 18:** the checklist shows on screen, a parent or guardian is emailed to confirm, and the student gets the emailed copy only after they do.
 
+## 14. Guides hub `/guides` (built)
+
+- **Title:** Guides to Studying in Ireland for International Students
+- **Meta:** Plain-English guides to studying in Ireland, from visa requirements to English tests, for students, parents and universities. Written and reviewed by an expert.
+- **H1:** Guides to studying in Ireland
+- **Answer:** BloomAbroad's guides explain how to study in Ireland in plain English, from choosing a course to meeting immigration requirements. Each guide is written for students and families or for universities, reviewed by Dr Olaniyi Kolawole, and links to official sources, so you can check every fact yourself.
+- Until a guide is published the hub shows "Our first guides are on the way", is `noindex`, and is hidden from the nav and sitemap.
