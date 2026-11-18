@@ -60,11 +60,12 @@ Items 1 to 4 and 9 are Remi's. Send them as one message today.
 
 ## 4. Gate B build order (P1 plus payment-critical P2)
 
-**Progress on branch `p1-structure`** (updated 18 Nov 2026): items 1 to 4 and 6 are built.
+**Progress on branch `p1-structure`** (updated 18 Nov 2026): items 1 to 7 are built.
 Shared blocks, content files (`src/content/`), site-wide schema, `llms.txt`, the rebuilt homepage,
-`/students` and `/universities`, the disclaimer component, a mobile menu, and a build-time SEO check
-(`scripts/check-seo.mjs`). Not yet built: checklist (5), `/verify` (7), `/about` (8), `/pricing` (9),
-Stripe (10), the `.ai` handover (11). Links to unbuilt pages are hidden by flags in `src/content/site.ts`.
+`/students` and `/universities`, the disclaimer component, a mobile menu, a build-time SEO check
+(`scripts/check-seo.mjs`), the free checklist (`/checklist`, built natively, second migration, personal
+checklist email), and `/verify`. Not yet built: `/about` (8), `/pricing` (9), Stripe (10), the `.ai` handover
+(11). Links to unbuilt pages are hidden by flags in `src/content/site.ts`.
 
 Rough effort is in developer-days.
 

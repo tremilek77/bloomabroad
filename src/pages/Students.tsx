@@ -198,6 +198,16 @@ export function StudentsPage() {
       </Section>
 
       <Disclaimer variant="short" />
+      {READY.verify && (
+        <p className="-mt-3 pb-6 text-center">
+          <Link
+            to="/verify"
+            className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            How to verify it's really us →
+          </Link>
+        </p>
+      )}
 
       <Section id="faq" eyebrow="FAQs" title="Questions, answered" width="narrow">
         <p className="text-sm font-bold uppercase tracking-wide text-muted-foreground">

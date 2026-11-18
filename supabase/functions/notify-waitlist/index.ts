@@ -8,8 +8,15 @@
 //        - Parent / sponsor   → "you're on the waitlist"
 //        - Student UNDER 18   → NOTHING to the student. Their parent/guardian gets
 //                               a confirmation request instead.
+//        - Joined via the free checklist (tag "checklist") → their personal
+//                               Ireland Readiness Checklist instead of the
+//                               generic welcome. The items are recomputed HERE
+//                               from the saved answers, never taken from the
+//                               row, so nobody can get their own text emailed
+//                               from our domain.
 // When a parent confirms (UPDATE: parent_confirmed_at goes from empty to set),
-// the under-18 student gets their normal "you're on the waitlist" email.
+// the under-18 student gets their normal email (the checklist, if that is how
+// they joined).
 //
 // All via Resend, server-side, so the API key stays secret. Triggered by a
 // Database Webhook on public.waitlist for BOTH Insert and Update events
@@ -29,6 +36,9 @@
 
 // @ts-nocheck  (Deno runtime globals aren't in the app's TS project)
 
+// Shared with the website: questions, options and rules for the checklist.
+import checklistRules from '../_shared/checklist.json' with { type: 'json' }
+
 interface WaitlistRecord {
   id: string
   name: string
@@ -45,6 +55,8 @@ interface WaitlistRecord {
   parent_email: string | null
   parent_confirmation_token: string | null
   parent_confirmed_at: string | null
+  tags: string[] | null
+  checklist_answers: Record<string, string> | null
   created_at: string
 }
 
@@ -117,6 +129,7 @@ function adminHtml(rec: WaitlistRecord) {
   // Only show the fields that apply to this role and were filled in.
   const rows: [string, string | null][] = [
     ['Category', rec.role],
+    ['Source', isChecklist(rec) ? 'Free checklist' : null],
     ['Email', rec.email],
     ['WhatsApp', rec.whatsapp],
     ['Country', rec.country],
@@ -301,6 +314,67 @@ function parentConfirmHtml(rec: WaitlistRecord, link: string) {
   )
 }
 
+/* ----------------------------- free checklist ------------------------- */
+
+const isChecklist = (rec: WaitlistRecord) => Array.isArray(rec.tags) && rec.tags.includes('checklist')
+
+/** Items for this person's answers. Only answers that match a known option
+ *  count, so a hand-made row can't change what is emailed. */
+function checklistItems(rec: WaitlistRecord): string[] {
+  const given = rec.checklist_answers ?? {}
+  const answers: Record<string, string> = {}
+  for (const q of checklistRules.questions) {
+    if (q.options?.includes(given[q.id])) answers[q.id] = given[q.id]
+  }
+  return checklistRules.items
+    .filter((r) => !r.when || r.when.in.includes(answers[r.when.q] ?? ''))
+    .map((r) => r.text)
+}
+
+function checklistHtml(rec: WaitlistRecord) {
+  const first = firstName(rec)
+  const items = checklistItems(rec)
+    .map(
+      (t) =>
+        `<li style="margin:0 0 12px 0;padding-left:4px;">${esc(t)}</li>`,
+    )
+    .join('')
+  return MAIL_SHELL(
+    'Your personal checklist for studying in Ireland.',
+    `
+    <tr><td style="padding:16px 36px 0 36px;">
+      <p style="margin:0 0 6px 0;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#1D9E75;font-weight:bold;">Your checklist</p>
+      <h1 style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:25px;line-height:1.3;color:#12261F;font-weight:bold;">Your Ireland Readiness Checklist</h1>
+    </td></tr>
+    <tr><td style="padding:22px 36px 0 36px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:#3C4B45;">
+      ${P(`Hi ${first},`, 14)}
+      ${P("Here's what to prepare, based on your answers.", 14)}
+      <ol style="margin:0 0 22px 0;padding-left:22px;">${items}</ol>
+    </td></tr>
+    <tr><td style="padding:4px 36px 0 36px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#E1F5EE;border-radius:10px;"><tr>
+        <td style="padding:18px 20px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.65;color:#0F4A3A;">
+          Your checklist shows what to prepare. The full BloomAbroad assessment tells you where you stand. It checks your application and immigration readiness, and an experienced consultant reviews every result. You're on the waitlist for our early 2027 launch.
+        </td>
+      </tr></table>
+    </td></tr>
+    <tr><td style="padding:18px 36px 0 36px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.65;color:#5B6B65;">
+      ${P("This checklist is general guidance based on your answers. It isn't an assessment, and it doesn't predict admission, visa or immigration decisions.", 26)}
+    </td></tr>
+    <tr><td style="padding:0 36px 30px 36px;border-top:1px solid #E3EAE7;">
+      <p style="margin:22px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;color:#3C4B45;">Talk soon,</p>
+      <p style="margin:10px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#12261F;"><strong>The BloomAbroad Team</strong></p>
+      <p style="margin:10px 0 0 0;font-family:Helvetica,Arial,sans-serif;font-size:14px;"><a href="https://bloomabroad.ie" style="color:#0F6E56;text-decoration:none;">bloomabroad.ie</a></p>
+    </td></tr>`,
+  )
+}
+
+/** What a student (or a parent-confirmed under-18) is sent once they may be emailed. */
+const welcomeFor = (rec: WaitlistRecord) =>
+  isChecklist(rec)
+    ? { subject: 'Your Ireland Readiness Checklist', html: checklistHtml(rec) }
+    : { subject: "You're on the waitlist", html: studentHtml(rec) }
+
 /* -------------------------------- handler ----------------------------- */
 
 Deno.serve(async (req) => {
@@ -331,11 +405,7 @@ Deno.serve(async (req) => {
       Boolean(rec.parent_confirmed_at) && !payload.old_record?.parent_confirmed_at
     if (justConfirmed && SEND_CONFIRMATION) {
       try {
-        await sendEmail({
-          to: rec.email,
-          subject: "You're on the waitlist",
-          html: studentHtml(rec),
-        })
+        await sendEmail({ to: rec.email, ...welcomeFor(rec) })
       } catch (e) {
         console.error('Post-confirmation email failed (non-fatal):', e)
       }
@@ -353,7 +423,7 @@ Deno.serve(async (req) => {
     await sendEmail({
       to: NOTIFY_TO,
       replyTo: rec.email,
-      subject: `New ${rec.role} waitlist signup: ${rec.name}`,
+      subject: `New ${rec.role} ${isChecklist(rec) ? 'checklist' : 'waitlist'} signup: ${rec.name}`,
       html: adminHtml(rec),
     })
   } catch (e) {
@@ -382,11 +452,7 @@ Deno.serve(async (req) => {
           html: universityHtml(rec),
         })
       } else {
-        await sendEmail({
-          to: rec.email,
-          subject: "You're on the waitlist",
-          html: studentHtml(rec),
-        })
+        await sendEmail({ to: rec.email, ...welcomeFor(rec) })
       }
     } catch (e) {
       console.error('Applicant email failed (non-fatal):', e)

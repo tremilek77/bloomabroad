@@ -330,3 +330,15 @@ answer-first copy, named authors, dates and original data, not the markup.
 
 **Search Console:** set up now (domain property by DNS). The brief says to confirm phrases in Search Console,
 and a new site has no data for weeks, so start the clock today.
+
+## 13. Free checklist `/checklist` (built)
+
+- **Title:** Free Ireland Readiness Checklist for Students | BloomAbroad
+- **Meta:** Answer eight quick questions and get a personal list of what to prepare before you apply to study in Ireland, from English tests to documents. Free, 2 minutes.
+- **H1:** Get your free Ireland Readiness Checklist
+- **Answer:** The Ireland Readiness Checklist is a free 2-minute quiz for students planning to study in Ireland. Answer eight questions and get a personal list of what to prepare, from English tests to documents. It is a starting point, not an assessment, and it gives no score or outcome.
+- **Under the hero:** The checklist is free. The full assessment is paid. We don't ask about money or visa history.
+- **Flow:** eight one-question screens with a progress bar, then first name, email, WhatsApp (optional), age, parent email if under 18, unticked consent box, button `Show my checklist`.
+- **Rules and wording:** `supabase/functions/_shared/checklist.json` (one file read by the site and the email).
+- **Under 18:** the checklist shows on screen, a parent or guardian is emailed to confirm, and the student gets the emailed copy only after they do.
+

@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Check, ChevronDown, Loader2 } from 'lucide-react'
+import { Check, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Reveal } from './saasta/Reveal'
 import { addEntry, type NewEntry, type Role } from '@/lib/waitlist'
-import { COUNTRY_GROUPS, OTHER_COUNTRY } from '@/lib/countries'
+import { OTHER_COUNTRY } from '@/lib/countries'
+import { AGE_BANDS, CONSENT_TEXT, STARTS, STUDY_LEVELS, SUPPORTING } from '@/content/formOptions'
+import { CountryOptions, Field, Select, inputCls } from '@/components/form/fields'
 
 /* -------------------------------------------------------------------------
  * Role-based waitlist form (brief, Fix 1).
@@ -35,15 +37,6 @@ const ROLES = [
   { value: 'Parent', label: "I'm a parent or sponsor" },
   { value: 'University', label: 'I represent a university or college' },
 ] as const
-
-const SUPPORTING = ['My child', 'Another family member', 'Someone I sponsor']
-const STUDY_LEVELS = ['Undergraduate', 'Postgraduate', 'Not sure yet']
-const STARTS = ['September 2027', 'January 2028', 'Later', 'Not sure yet']
-const AGE_BANDS = ['Under 18', '18–24', '25+']
-
-/** The wording saved alongside each sign-up as the record of consent. */
-const CONSENT_TEXT =
-  "Send me updates about BloomAbroad's launch. I can unsubscribe at any time. By joining, you agree to our Privacy Notice."
 
 const filled = (v: string | undefined) => Boolean(v && v.trim())
 const validEmail = (v: string) => z.email().safeParse(v).success
@@ -347,19 +340,7 @@ export function WaitlistForm({
                       error={errors.country?.message}
                     >
                       <Select id="country" invalid={!!errors.country} {...register('country')}>
-                        <option value="">Select your country</option>
-                        {COUNTRY_GROUPS.map((g) => (
-                          <optgroup key={g.label} label={g.label}>
-                            {g.countries.map((c) => (
-                              <option key={c} value={c}>
-                                {c}
-                              </option>
-                            ))}
-                          </optgroup>
-                        ))}
-                        <optgroup label="Other">
-                          <option value={OTHER_COUNTRY}>Other</option>
-                        </optgroup>
+                        <CountryOptions />
                       </Select>
                     </Field>
                     {country === OTHER_COUNTRY && (
@@ -553,67 +534,5 @@ function Confirmation({ values }: { values: FormValues }) {
         </>
       )}
     </div>
-  )
-}
-
-function Field({
-  label,
-  htmlFor,
-  hint,
-  error,
-  children,
-}: {
-  label: string
-  htmlFor: string
-  hint?: string
-  error?: string
-  children: React.ReactNode
-}) {
-  return (
-    <div>
-      <label
-        htmlFor={htmlFor}
-        className="mb-2 block text-sm font-medium text-foreground"
-      >
-        {label}
-      </label>
-      {children}
-      {hint && !error && (
-        <p className="mt-1.5 text-sm text-muted-foreground">{hint}</p>
-      )}
-      {error && (
-        <p className="mt-1.5 text-sm text-destructive" role="alert">
-          {error}
-        </p>
-      )}
-    </div>
-  )
-}
-
-/** A native <select> (best on mobile) with a chevron, styled like the inputs. */
-function Select({
-  invalid,
-  children,
-  ...props
-}: React.ComponentProps<'select'> & { invalid?: boolean }) {
-  return (
-    <div className="relative">
-      <select
-        aria-invalid={invalid}
-        className={cn(inputCls(!!invalid), 'appearance-none pr-10')}
-        {...props}
-      >
-        {children}
-      </select>
-      <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-    </div>
-  )
-}
-
-function inputCls(invalid: boolean) {
-  return cn(
-    'w-full rounded-xl border bg-card px-4 py-3 text-[15px] text-foreground outline-none transition-colors placeholder:text-muted-foreground/60',
-    'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0',
-    invalid ? 'border-destructive' : 'border-input',
   )
 }

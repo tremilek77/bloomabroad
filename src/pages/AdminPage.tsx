@@ -510,5 +510,6 @@ function details(e: WaitlistEntry): string[] {
     )
   }
   if (e.whatsapp) lines.push(`WhatsApp ${e.whatsapp}`)
+  if (e.tags.includes('checklist')) lines.push('Joined via the free checklist')
   return lines
 }

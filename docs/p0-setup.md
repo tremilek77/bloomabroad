@@ -21,6 +21,12 @@ It is purely additive, so the currently-live site keeps working after it runs. I
 - `confirm_parent(uuid)`, the function behind the `/confirm` page
 - `consent_log`, the dated record of cookie-banner choices
 
+### 1b. Run the second migration (free checklist)
+
+Also in the SQL Editor, **after the first one and before the site deploys**:
+`supabase/migrations/20261119000000_checklist.sql`. It adds a `tags` column and the checklist
+answers. It is additive, so the current live site keeps working either way.
+
 ### 2. Deploy the updated Edge Function
 
 ```bash
@@ -34,6 +40,8 @@ supabase secrets set SITE_URL=https://bloomabroad.vercel.app
 ```
 
 `NOTIFY_TO` can still be several comma-separated addresses.
+The function now also sends the personal checklist email, and it reads
+`supabase/functions/_shared/checklist.json`, so deploy it from the project root (the CLI bundles that file).
 Change `SITE_URL` to `https://bloomabroad.ie` when the domain is live: it is where
 the parent's confirmation link points.
 
@@ -60,6 +68,7 @@ cookies, so it needs no consent. It's skipped on localhost and on `/admin`.
 | `registeredOffice` | Remi | Privacy, Terms, Contact, footer |
 | `whatsappNumber` | Remi | Contact |
 | `dataRegion` | Supabase project region | Privacy |
+| `whatsappChannel` | Remi (or remove the line if there is no channel) | /verify |
 | `BOOKING_URL` | Remi (30-min call link) | Contact; also the `BOOKING_LINK` secret for the university email |
 | `SOCIALS` | Remi | Footer (hidden until filled) |
 | `legalLastUpdated` | set to the actual publish date | Privacy, Terms |

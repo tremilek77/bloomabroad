@@ -1,6 +1,4 @@
 import { DISCLAIMER, OFFICIAL_IMMIGRATION_URL } from '@/content/disclaimers'
-import { READY } from '@/content/site'
-import { Link } from 'react-router-dom'
 
 /**
  * The brief's disclaimer (Fix 9). `short` sits under heroes and trust areas;
@@ -30,14 +28,6 @@ export function Disclaimer({ variant = 'short' }: { variant?: 'short' | 'standar
           >
             irishimmigration.ie
           </a>
-          {READY.verify && (
-            <>
-              {' '}
-              <Link to="/verify" className="font-medium text-primary underline underline-offset-4">
-                Read the security notice
-              </Link>
-            </>
-          )}
         </p>
       </div>
     </aside>

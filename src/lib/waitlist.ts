@@ -37,16 +37,22 @@ export type WaitlistEntry = {
   consentAt: string
   /** Under-18 students: when their parent/guardian confirmed, if they have. */
   parentConfirmedAt: string | null
+  /** Where the contact came from, e.g. ["checklist"]. Empty for plain waitlist sign-ups. */
+  tags: string[]
+  /** Answers to the free checklist, when that is how they joined. */
+  checklistAnswers: Record<string, string> | null
   createdAt: string // ISO timestamp
 }
 
 /** What the form hands over. IDs and timestamps are added by the store. */
 export type NewEntry = Omit<
   WaitlistEntry,
-  'id' | 'createdAt' | 'consentAt' | 'parentConfirmedAt'
+  'id' | 'createdAt' | 'consentAt' | 'parentConfirmedAt' | 'tags' | 'checklistAnswers'
 > & {
   /** The exact consent wording the person ticked. Saved with the entry. */
   consentText: string
+  tags?: string[]
+  checklistAnswers?: Record<string, string>
 }
 
 export const storageMode: 'supabase' | 'local' = isSupabaseConfigured
@@ -69,10 +75,12 @@ function getLocalEntries(): WaitlistEntry[] {
 }
 
 function addLocalEntry(data: NewEntry): void {
-  const { consentText: _consentText, ...rest } = data
+  const { consentText: _consentText, tags, checklistAnswers, ...rest } = data
   const now = new Date().toISOString()
   const entry: WaitlistEntry = {
     ...rest,
+    tags: tags ?? [],
+    checklistAnswers: checklistAnswers ?? null,
     id:
       typeof crypto !== 'undefined' && 'randomUUID' in crypto
         ? crypto.randomUUID()
@@ -122,6 +130,8 @@ export async function addEntry(data: NewEntry): Promise<AddResult> {
       age_band: orNull(data.ageBand),
       parent_email: orNull(data.parentEmail),
       consent_text: data.consentText,
+      tags: data.tags ?? [],
+      checklist_answers: data.checklistAnswers ?? null,
     })
     if (error) return { ok: false, error: error.message }
     return { ok: true }
@@ -136,7 +146,7 @@ export async function fetchEntries(): Promise<WaitlistEntry[]> {
     const { data, error } = await supabase
       .from(WAITLIST_TABLE)
       .select(
-        'id, name, email, role, org, job_title, whatsapp, country, supporting, study_level, intended_start, age_band, parent_email, consent_at, parent_confirmed_at, created_at',
+        'id, name, email, role, org, job_title, whatsapp, country, supporting, study_level, intended_start, age_band, parent_email, consent_at, parent_confirmed_at, tags, checklist_answers, created_at',
       )
       .order('created_at', { ascending: false })
     if (error) throw new Error(error.message)
@@ -156,6 +166,8 @@ export async function fetchEntries(): Promise<WaitlistEntry[]> {
       parentEmail: r.parent_email ?? '',
       consentAt: r.consent_at ?? '',
       parentConfirmedAt: r.parent_confirmed_at ?? null,
+      tags: Array.isArray(r.tags) ? (r.tags as string[]) : [],
+      checklistAnswers: (r.checklist_answers as Record<string, string> | null) ?? null,
       createdAt: r.created_at ?? new Date().toISOString(),
     }))
   }
@@ -200,6 +212,7 @@ export function toCsv(entries: WaitlistEntry[]): string {
     'Age',
     'Parent email',
     'Parent confirmed',
+    'Tags',
     'Consent given',
     'Submitted',
   ]
@@ -218,6 +231,7 @@ export function toCsv(entries: WaitlistEntry[]): string {
       e.ageBand,
       e.parentEmail,
       e.ageBand === 'Under 18' ? when(e.parentConfirmedAt) || 'Pending' : '',
+      e.tags.join(' '),
       when(e.consentAt),
       when(e.createdAt),
     ]

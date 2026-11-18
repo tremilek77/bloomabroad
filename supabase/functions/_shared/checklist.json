@@ -1,0 +1,26 @@
+{
+  "_about": "Ireland Readiness Checklist: questions, options and rules (brief, Fix 6b). Read by the website AND by the notify-waitlist Edge Function, which recomputes the items itself from the saved answers so nobody can put their own text into an email sent from our domain. Edit wording here only. An item with no 'when' is shown to everyone.",
+
+  "questions": [
+    { "id": "q1", "prompt": "What are you planning to study?", "options": ["Undergraduate", "Postgraduate", "Not sure yet"] },
+    { "id": "q2", "prompt": "Which country do you live in?", "type": "country" },
+    { "id": "q3", "prompt": "When do you hope to start?", "options": ["September 2027", "January 2028", "Later", "Not sure"] },
+    { "id": "q4", "prompt": "Have you chosen a course?", "options": ["Yes", "I have a shortlist", "Not yet"] },
+    { "id": "q5", "prompt": "Does your chosen course follow on from your previous study or work?", "options": ["Yes", "Partly", "No", "Not sure"] },
+    { "id": "q6", "prompt": "Have you taken an English language test (such as IELTS, PTE or TOEFL)?", "options": ["Yes, and it's still valid", "Yes, but it may expire", "Not yet", "Not sure if I need one"] },
+    { "id": "q7", "prompt": "Is your passport valid for your full planned stay in Ireland?", "options": ["Yes", "No", "Not sure"] },
+    { "id": "q8", "prompt": "Who's supporting your studies?", "options": ["Me", "My parents or family", "A sponsor or employer", "A scholarship", "Not sure yet"] }
+  ],
+
+  "items": [
+    { "when": { "q": "q4", "in": ["I have a shortlist", "Not yet"] }, "text": "Narrow down to 2–3 Irish courses that build on what you've studied so far." },
+    { "when": { "q": "q5", "in": ["Partly", "No", "Not sure"] }, "text": "Be ready to explain clearly how your chosen course connects to your previous study or career plans." },
+    { "when": { "q": "q3", "in": ["September 2027"] }, "text": "Many Irish courses recruit on a rolling basis, so applying early helps. Aim to apply in the next few months." },
+    { "when": { "q": "q6", "in": ["Yes, but it may expire", "Not yet", "Not sure if I need one"] }, "text": "Check whether your course needs an English test, and make sure your result will still be valid when you apply." },
+    { "when": { "q": "q7", "in": ["No", "Not sure"] }, "text": "Check your passport's expiry date and renew early if needed. Renewals can take weeks." },
+    { "when": { "q": "q8", "in": ["My parents or family", "A sponsor or employer", "Not sure yet"] }, "text": "Plan your study budget together early, and check the official requirements on irishimmigration.ie." },
+    { "text": "Gather your academic transcripts and certificates in one place." },
+    { "text": "If you've ever been refused a visa for any country, you'll need to declare it when you apply." },
+    { "text": "Only apply and pay through official Irish channels. Visa applications go through the official online system (AVATS)." }
+  ]
+}

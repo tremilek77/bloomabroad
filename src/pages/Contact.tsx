@@ -78,6 +78,11 @@ export function ContactPage() {
           reply or pay.
         </li>
       </UL>
+      <P>
+        <Link to="/verify" className={linkCls}>
+          How to verify it's really us →
+        </Link>
+      </P>
 
       <H2>Our details</H2>
       <P>

@@ -14,6 +14,8 @@ const lazyPage = <T extends Record<string, React.ComponentType>>(
 
 const StudentsPage = lazyPage(() => import('@/pages/Students'), 'StudentsPage')
 const UniversitiesPage = lazyPage(() => import('@/pages/Universities'), 'UniversitiesPage')
+const ChecklistPage = lazyPage(() => import('@/pages/Checklist'), 'ChecklistPage')
+const VerifyPage = lazyPage(() => import('@/pages/Verify'), 'VerifyPage')
 const PrivacyPage = lazyPage(() => import('@/pages/Privacy'), 'PrivacyPage')
 const TermsPage = lazyPage(() => import('@/pages/Terms'), 'TermsPage')
 const ContactPage = lazyPage(() => import('@/pages/Contact'), 'ContactPage')
@@ -77,6 +79,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/students" element={<StudentsPage />} />
           <Route path="/universities" element={<UniversitiesPage />} />
+          <Route path="/checklist" element={<ChecklistPage />} />
+          <Route path="/verify" element={<VerifyPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/contact" element={<ContactPage />} />

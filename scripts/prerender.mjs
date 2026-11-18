@@ -111,6 +111,8 @@ const ROUTES = [
   { route: '/', file: 'index.html', expect: 'What is enrolment readiness', settle: 2000 },
   { route: '/students', file: 'students.html', expect: 'Four steps to a clear answer', settle: 2000 },
   { route: '/universities', file: 'universities.html', expect: 'Four steps. One clear answer.', settle: 2000 },
+  { route: '/checklist', file: 'checklist.html', expect: 'Question 1 of 8', settle: 1500 },
+  { route: '/verify', file: 'verify.html', expect: 'Where to find us', settle: 1500 },
   { route: '/privacy', file: 'privacy.html', expect: 'The short version', settle: 800 },
   { route: '/terms', file: 'terms.html', expect: 'What BloomAbroad is not', settle: 800 },
   { route: '/contact', file: 'contact.html', expect: 'Making sure it', settle: 800 },

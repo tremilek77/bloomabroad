@@ -18,6 +18,8 @@ const PAGES = [
   { file: 'index.html', route: '/', marketing: true },
   { file: 'students.html', route: '/students', marketing: true },
   { file: 'universities.html', route: '/universities', marketing: true },
+  { file: 'checklist.html', route: '/checklist', marketing: true },
+  { file: 'verify.html', route: '/verify', marketing: true },
   { file: 'privacy.html', route: '/privacy' },
   { file: 'terms.html', route: '/terms' },
   { file: 'contact.html', route: '/contact' },

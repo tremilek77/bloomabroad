@@ -21,6 +21,9 @@ export const COMPANY = {
   croNumber: '[CRO no.]',
   registeredOffice: '[registered office address, Cork]',
   whatsappNumber: '[WhatsApp number]',
+  /** Shown on /verify. Leave the [placeholder] until the channel exists, or
+   *  remove the line if there will not be one. */
+  whatsappChannel: '[channel name]',
 
   // --- Two-email rule (applies everywhere) -----------------------------
   /** General questions, orders, cancellations, complaints. */
