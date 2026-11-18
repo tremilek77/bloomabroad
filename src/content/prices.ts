@@ -30,3 +30,22 @@ export const fmt = {
   all: (m: Money) =>
     `€${m.eur} (₦${nf(m.ngn)} · KSh ${nf(m.kes)} · GH₵ ${nf(m.ghs)})`,
 }
+
+export type CurrencyId = 'eur' | 'ngn' | 'kes' | 'ghs'
+
+export const CURRENCIES: { id: CurrencyId; label: string; country: string }[] = [
+  { id: 'eur', label: '€ Euro', country: 'Ireland' },
+  { id: 'ngn', label: '₦ Naira', country: 'Nigeria' },
+  { id: 'kes', label: 'KSh Shillings', country: 'Kenya' },
+  { id: 'ghs', label: 'GH₵ Cedis', country: 'Ghana' },
+]
+
+/** One price in one currency, e.g. money(PRICES.assessment, 'ngn') -> "₦49,000". */
+export const money = (m: Money, cur: CurrencyId) => fmt[cur](m)
+
+/**
+ * Whether Stripe has been confirmed to charge in naira, shillings and cedis
+ * (brief, developer question 6). Until it has, /pricing says local prices are
+ * approximate and that checkout is in euro. Flip to true once confirmed.
+ */
+export const LOCAL_PRICES_CONFIRMED = false

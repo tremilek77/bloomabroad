@@ -5,7 +5,7 @@
  */
 export const READY = {
   about: false, // Gate B item 8: needs photos and bios (Olaniyi's permission)
-  pricing: false, // Gate B item 9
+  pricing: true, // Gate B item 9
   verify: true, // Gate B item 7
   checklist: true, // Gate B item 5: the free Ireland Readiness Checklist
   sample: false, // Gate C: watermarked sample outcome report
