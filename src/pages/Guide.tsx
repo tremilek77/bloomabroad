@@ -112,7 +112,14 @@ export function GuidePage() {
         </h1>
 
         <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-          By <strong className="font-semibold text-foreground">{METHODOLOGY_ADVISER.name}</strong>
+          By{' '}
+          {READY.about ? (
+            <Link to="/about" className="font-semibold text-foreground underline-offset-4 hover:underline">
+              {METHODOLOGY_ADVISER.name}
+            </Link>
+          ) : (
+            <strong className="font-semibold text-foreground">{METHODOLOGY_ADVISER.name}</strong>
+          )}
           , {METHODOLOGY_ADVISER.title}. {METHODOLOGY_ADVISER.credential}.
           <br />
           Last reviewed {formatDate(guide.reviewed)} · {guide.readingMinutes} min read

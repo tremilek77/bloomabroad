@@ -4,7 +4,10 @@
  * that ships the page.
  */
 export const READY = {
-  about: false, // Gate B item 8: needs photos and bios (Olaniyi's permission)
+  // /about is built but hidden (404 on the live site) until this is true.
+  // BEFORE flipping it: Dr Kolawole agrees to his bio and photo, both photos are in
+  // /public/team and set in content/team.ts, and add the /about line to public/llms.txt.
+  about: false,
   pricing: true, // Gate B item 9
   verify: true, // Gate B item 7
   checklist: true, // Gate B item 5: the free Ireland Readiness Checklist

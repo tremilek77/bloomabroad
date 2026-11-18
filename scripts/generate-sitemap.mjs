@@ -4,6 +4,7 @@
 
 import { readFileSync, writeFileSync } from 'node:fs'
 import { loadGuides } from './lib/guides.mjs'
+import { isReady } from './lib/flags.mjs'
 
 const company = readFileSync(new URL('../src/lib/company.ts', import.meta.url), 'utf8')
 const SITE_URL = company.match(/SITE_URL\s*=\s*'([^']+)'/)?.[1]?.replace(/\/$/, '')
@@ -22,6 +23,8 @@ const pages = [
   ['/complaints', 'yearly', '0.3'],
   ['/cookies', 'yearly', '0.3'],
 ].map(([path, changefreq, priority]) => ({ path, changefreq, priority }))
+
+if (isReady('about')) pages.push({ path: '/about', changefreq: 'yearly', priority: '0.6' })
 
 const guides = loadGuides({ includeDrafts: false })
 if (guides.length) {

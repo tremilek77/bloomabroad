@@ -150,7 +150,7 @@ Standard disclaimer + FAQs (section 8).
 - **Title:** About BloomAbroad: Remi Kolawole and Dr Olaniyi Kolawole
 - **Meta:** Meet the team behind BloomAbroad: founder Remi Kolawole, with 10+ years supporting Ireland-bound students, and Methodology Adviser Dr Olaniyi Kolawole.
 - **H1:** Built by people who've made the journey
-- **Answer:** BloomAbroad was founded by Remi Kolawole, who has spent more than ten years supporting students applying to study in Ireland. Remi and her husband, Dr Olaniyi Kolawole, both came to Ireland from Nigeria, studied here and built their lives here over more than twenty years.
+- **Answer:** BloomAbroad was founded by Remi Kolawole, who has spent more than ten years supporting students applying to study in Ireland. Remi and her husband, Dr Olaniyi Kolawole, both came to Ireland, studied here and built their lives here over more than twenty years.
 
 **Remi Kolawole, Founder** [photo]
 From Nigeria, in Ireland for over two decades, and a graduate of Irish study herself. For over ten years she co-founded and led Solid-Link Consulting, which supported around 500 students, most applying to study in Ireland. She kept seeing capable students learn they weren't ready only after the fees were paid and the months had passed. BloomAbroad is her answer.

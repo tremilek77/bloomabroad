@@ -10,6 +10,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { loadGuides } from './lib/guides.mjs'
+import { isReady } from './lib/flags.mjs'
 import { fileURLToPath } from 'node:url'
 
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'dist')
@@ -28,6 +29,9 @@ const PAGES = [
   { file: 'complaints.html', route: '/complaints' },
   { file: 'cookies.html', route: '/cookies' },
 ]
+
+// /about is checked once it is live.
+if (isReady('about')) PAGES.push({ file: 'about.html', route: '/about', marketing: true })
 
 // The hub and every published guide are marketing pages too.
 {

@@ -29,6 +29,7 @@ import { readFile, writeFile, stat, mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { loadGuides, showDraftsFromEnv } from './lib/guides.mjs'
+import { isReady } from './lib/flags.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(__dirname, '..', 'dist')
@@ -123,6 +124,11 @@ const ROUTES = [
   // The archived backup: prerendered so its noindex tag is in the static HTML.
   { route: '/old', file: 'old.html', expect: 'archived copy', settle: 2000 },
 ]
+
+// /about is a hidden draft until READY.about is switched on (preview builds show it).
+if (isReady('about') || showDraftsFromEnv()) {
+  ROUTES.push({ route: '/about', file: 'about.html', expect: 'Who is behind BloomAbroad', settle: 1500 })
+}
 
 // The guides hub, and one page per guide. Drafts are rendered only on preview
 // builds (VITE_SHOW_DRAFTS=1), exactly as the site itself includes them.

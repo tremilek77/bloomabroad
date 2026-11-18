@@ -64,8 +64,10 @@ Items 1 to 4 and 9 are Remi's. Send them as one message today.
 site-wide schema, `llms.txt`, the homepage, `/students`, `/universities`, the mobile menu, the build-time SEO
 check, `/checklist`, `/verify`, `/pricing`, and the **guides system** (hub, article pages, markdown files,
 build-time editorial checks, generated sitemap, Article and Breadcrumb schema; see [guides.md](guides.md)).
-Guide 1 is drafted (`published: false`, awaiting Dr Kolawole). Not yet built: `/about` (8), Stripe checkout (10),
-the `.ai` handover (11), `/nigeria`, testimonials, the sample report and the location banner. Links to unbuilt
+Guide 1 is drafted (`published: false`, awaiting Dr Kolawole). `/about` (8) is built with placeholder photos but
+hidden (a 404 on the live site) until `READY.about` is switched on, which needs Dr Kolawole's permission and
+both photos (see the comment in `src/content/site.ts`). Not yet built: Stripe checkout (10), the `.ai` handover
+(11), `/nigeria`, testimonials, the sample report and the location banner. Links to unbuilt
 pages are hidden by flags in `src/content/site.ts`.
 
 Rough effort is in developer-days.
