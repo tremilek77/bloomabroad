@@ -1,4 +1,4 @@
-import { PRICES, fmt } from './prices'
+import { LOCAL_PRICES_CONFIRMED, PRICES, fmt } from './prices'
 import { READY } from './site'
 
 /**
@@ -33,7 +33,7 @@ export const STUDENT_FAQS: Faq[] = [
   },
   {
     q: 'How much does it cost?',
-    a: `The Readiness Assessment is ${fmt.all(PRICES.assessment)}. The first 100 waitlist members pay a founding price.`,
+    a: `The Readiness Assessment is ${fmt.all(PRICES.assessment)}. The first 100 waitlist members pay a founding price.${LOCAL_PRICES_CONFIRMED ? '' : ' Local prices are approximate: checkout is in euro, and you will always see the exact amount before you pay.'}`,
     link: { label: 'See pricing', to: '/pricing', when: READY.pricing },
   },
   {
@@ -100,7 +100,7 @@ export const UNIVERSITY_FAQS: Faq[] = [
   },
   {
     q: 'What is the assessment based on?',
-    a: 'A methodology designed by Dr Olaniyi Kolawole and built on more than ten years of documented student journeys. The criteria were developed with input from international student directors at eight Irish universities and colleges.',
+    a: `A methodology designed by ${READY.about ? 'Dr Olaniyi Kolawole' : 'a researcher in migration studies'} and built on more than ten years of documented student journeys. The criteria were developed with input from international student directors at eight Irish universities and colleges.`,
   },
   {
     q: 'How are findings validated?',

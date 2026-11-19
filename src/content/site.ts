@@ -7,6 +7,8 @@ export const READY = {
   // /about is built but hidden (404 on the live site) until this is true.
   // BEFORE flipping it: Dr Kolawole agrees to his bio and photo, both photos are in
   // /public/team and set in content/team.ts, and add the /about line to public/llms.txt.
+  // This flag also controls whether Dr Kolawole is NAMED on /universities, /verify and
+  // the FAQ. Until it is true those pages describe the methodology without naming him.
   about: false,
   pricing: true, // Gate B item 9
   verify: true, // Gate B item 7

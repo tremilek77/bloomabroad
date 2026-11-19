@@ -134,12 +134,16 @@ export function UniversitiesPage() {
             what happened, and why.
           </li>
           <li>
-            The readiness methodology was designed by {METHODOLOGY_ADVISER.name},{' '}
-            {METHODOLOGY_ADVISER.title}, who holds a PhD from University College Cork.{' '}
-            {READY.about && (
-              <Link to="/about" className="font-semibold text-primary underline-offset-4 hover:underline">
-                Meet the team →
-              </Link>
+            {READY.about ? (
+              <>
+                The readiness methodology was designed by {METHODOLOGY_ADVISER.name},{' '}
+                {METHODOLOGY_ADVISER.title}, who holds a PhD from University College Cork.{' '}
+                <Link to="/about" className="font-semibold text-primary underline-offset-4 hover:underline">
+                  Meet the team →
+                </Link>
+              </>
+            ) : (
+              'The readiness methodology was designed by a researcher in migration studies who holds a PhD.'
             )}
           </li>
           <li>

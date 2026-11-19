@@ -10,7 +10,7 @@ import { usePageMeta } from '@/lib/seo'
 import { useSchema, webPageNode } from '@/lib/schema'
 import { COMPANY, SOCIALS } from '@/lib/company'
 import { OFFICIAL_IMMIGRATION_URL } from '@/content/disclaimers'
-import { FOUNDER, METHODOLOGY_ADVISER } from '@/content/site'
+import { FOUNDER, METHODOLOGY_ADVISER, READY } from '@/content/site'
 
 const PATH = '/verify'
 const TITLE = 'Is It Really BloomAbroad? How to Verify Our Sites and Emails'
@@ -149,7 +149,9 @@ export function VerifyPage() {
         <div className="grid gap-5 md:grid-cols-2">
           <Card icon={UserCheck} title={`${FOUNDER.name}, ${FOUNDER.title}`}>
             <p>
-              Leads BloomAbroad, with {METHODOLOGY_ADVISER.name}, {METHODOLOGY_ADVISER.title}.
+              {READY.about
+                ? `Leads BloomAbroad, with ${METHODOLOGY_ADVISER.name}, ${METHODOLOGY_ADVISER.title}.`
+                : 'Leads BloomAbroad.'}
             </p>
           </Card>
           <Card icon={Mail} title="Anyone else" delay={0.06}>

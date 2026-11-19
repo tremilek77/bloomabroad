@@ -31,7 +31,7 @@ const TITLE = 'Pricing: Readiness Assessment from €30 | BloomAbroad'
 const DESCRIPTION =
   'One clear price, the same whatever your outcome. Readiness Assessment €30, Plus €65, with local prices in naira, shillings and cedis. First 100 pay less.'
 const ANSWER =
-  'The Readiness Assessment costs €30 and Readiness Assessment Plus costs €65, with local prices in naira, shillings and cedis. The price is the same whatever your outcome, and you see the exact amount before you pay. The first 100 waitlist members pay a founding price.'
+  `The Readiness Assessment costs €30 and Readiness Assessment Plus costs €65, with ${LOCAL_PRICES_CONFIRMED ? '' : 'approximate '}local prices in naira, shillings and cedis. The price is the same whatever your outcome, and you see the exact amount before you pay. The first 100 waitlist members pay a founding price.`
 
 const INCLUDED = [
   'Your full readiness outcome: Ready to Apply, Needs Support, or Not Yet in a Position to Apply',
@@ -168,12 +168,14 @@ export function PricingPage() {
             name="Readiness Assessment"
             price={money(PRICES.assessment, cur)}
             founding={money(PRICES.foundingAssessment, cur)}
+            approx={cur !== 'eur' && !LOCAL_PRICES_CONFIRMED}
             features={INCLUDED}
           />
           <Tier
             name="Readiness Assessment Plus"
             price={money(PRICES.plus, cur)}
             founding={money(PRICES.foundingPlus, cur)}
+            approx={cur !== 'eur' && !LOCAL_PRICES_CONFIRMED}
             lead="Everything in the Readiness Assessment, plus:"
             features={PLUS_EXTRA}
             featured
@@ -185,8 +187,10 @@ export function PricingPage() {
             <h2 className="text-lg font-bold text-heading">Founding member offer</h2>
             <p className="mt-2 text-[15px] leading-relaxed text-foreground/85">
               The first {FOUNDING_PLACES} people to book from our waitlist pay a founding price:
-              Readiness Assessment {money(PRICES.foundingAssessment, cur)}, Readiness
-              Assessment Plus {money(PRICES.foundingPlus, cur)}. Bookings open in January 2027.
+              Readiness Assessment {cur !== 'eur' && !LOCAL_PRICES_CONFIRMED && 'approx. '}
+              {money(PRICES.foundingAssessment, cur)}, Readiness Assessment Plus{' '}
+              {cur !== 'eur' && !LOCAL_PRICES_CONFIRMED && 'approx. '}
+              {money(PRICES.foundingPlus, cur)}. Bookings open in January 2027.
             </p>
             <div className="mt-5">
               <ButtonLink to="#waitlist">Join the waitlist</ButtonLink>
@@ -197,7 +201,11 @@ export function PricingPage() {
 
       <Section tone="tint" eyebrow="All prices" title="Every price in one table" width="narrow">
         <Table
-          head={['Tier', 'Euro', 'Nigeria', 'Kenya', 'Ghana']}
+          head={
+            LOCAL_PRICES_CONFIRMED
+              ? ['Tier', 'Euro', 'Nigeria', 'Kenya', 'Ghana']
+              : ['Tier', 'Euro', 'Nigeria (approx.)', 'Kenya (approx.)', 'Ghana (approx.)']
+          }
           rows={(
             [
               ['Readiness Assessment', PRICES.assessment],
@@ -214,8 +222,9 @@ export function PricingPage() {
           ])}
         />
         <p className="mt-4 text-sm text-muted-foreground">
-          Local prices are set in advance, rounded, and reviewed regularly. You'll always see
-          the exact amount before you pay.
+          Local prices are set in advance, rounded, and reviewed regularly.
+          {!LOCAL_PRICES_CONFIRMED && ' They are approximate for now, and checkout is in euro.'}{' '}
+          You'll always see the exact amount before you pay.
         </p>
       </Section>
 
@@ -249,6 +258,7 @@ function Tier({
   name,
   price,
   founding,
+  approx = false,
   lead,
   features,
   featured = false,
@@ -256,6 +266,8 @@ function Tier({
   name: string
   price: string
   founding: string
+  /** Local price that isn't confirmed yet, so label it "approx." */
+  approx?: boolean
   lead?: string
   features: string[]
   featured?: boolean
@@ -269,9 +281,13 @@ function Tier({
         )}
       >
         <h2 className="text-lg font-bold text-heading">{name}</h2>
-        <p className="mt-4 text-4xl font-extrabold tracking-tight text-heading">{price}</p>
+        <p className="mt-4 text-4xl font-extrabold tracking-tight text-heading">
+          {approx && <span className="mr-1.5 text-base font-medium text-muted-foreground">approx.</span>}
+          {price}
+        </p>
         <p className="mt-2 inline-flex w-fit rounded-full bg-signal/15 px-3 py-1 text-sm font-medium text-signal">
-          Founding price {founding}
+          Founding price {approx && 'approx. '}
+          {founding}
         </p>
         {lead && <p className="mt-6 text-sm font-semibold text-heading">{lead}</p>}
         <ul className={cn('space-y-3 text-[15px] leading-relaxed text-foreground/85', lead ? 'mt-3' : 'mt-6')}>
