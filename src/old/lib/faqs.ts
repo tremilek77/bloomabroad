@@ -1,4 +1,4 @@
-import type { Audience } from '@/components/audience'
+import type { Audience } from '@/old/components/audience'
 
 export type Faq = { q: string; a: string[] }
 

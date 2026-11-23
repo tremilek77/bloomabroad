@@ -1,13 +1,20 @@
-// Build-time prerender step: renders "/" in a real (headless) browser after
-// `vite build`, then writes the resulting HTML — with real text content —
-// back into dist/index.html. This is what lets bots that don't execute JS
-// (many AI answer-engine crawlers) read actual page content in the raw
-// initial HTML payload, rather than an empty `<div id="root"></div>` shell.
+// Build-time prerender step: renders each public page in a real (headless)
+// browser after `vite build`, then writes the resulting HTML — with real text
+// content, and the page's own <title>, description and canonical URL — to a
+// static file. This is what lets bots that don't execute JS (many AI
+// answer-engine crawlers) read actual page content in the raw initial HTML
+// payload, rather than an empty `<div id="root"></div>` shell.
 //
-// Only "/" is rendered. "/admin" is intentionally left as the plain CSR
-// shell — it's a private, auth-gated page that's also blocked in
-// robots.txt and tagged noindex at runtime; there's nothing useful (or
-// wanted) to prerender there.
+// Output (flat files; vercel.json has `cleanUrls: true`, so /privacy serves
+// privacy.html):  dist/index.html, dist/privacy.html, dist/terms.html, ...
+//
+// Left as the plain client-rendered shell on purpose: "/admin" and "/confirm"
+// (private / token pages, noindex + robots-disallowed) — nothing useful to
+// prerender there.
+//
+// To add a page: add it to ROUTES below. `expect` is a phrase that must be in
+// the rendered HTML — if it isn't, the page didn't render properly and that
+// file is NOT written (the site still works, as a client-rendered page).
 //
 // Known trade-off: this captures the page in its fully "settled" state
 // (scroll-reveal animations complete, counters at their final numbers) —
@@ -18,9 +25,11 @@
 // content) if it turns out to be noticeable in practice.
 
 import { createServer } from 'node:http'
-import { readFile, writeFile, stat } from 'node:fs/promises'
+import { readFile, writeFile, stat, mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { loadGuides, showDraftsFromEnv } from './lib/guides.mjs'
+import { isReady } from './lib/flags.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(__dirname, '..', 'dist')
@@ -100,6 +109,73 @@ async function serveStatic(req, res) {
   }
 }
 
+const ROUTES = [
+  { route: '/', file: 'index.html', expect: 'What is enrolment readiness', settle: 2000 },
+  { route: '/students', file: 'students.html', expect: 'Four steps to a clear answer', settle: 2000 },
+  { route: '/universities', file: 'universities.html', expect: 'Four steps. One clear answer.', settle: 2000 },
+  { route: '/checklist', file: 'checklist.html', expect: 'Question 1 of 8', settle: 1500 },
+  { route: '/nigeria', file: 'nigeria.html', expect: 'Planning for September 2027', settle: 1500 },
+  { route: '/pricing', file: 'pricing.html', expect: 'Founding member offer', settle: 1500 },
+  { route: '/verify', file: 'verify.html', expect: 'Where to find us', settle: 1500 },
+  { route: '/how-we-assess', file: 'how-we-assess.html', expect: 'How does an assessment work', settle: 1500 },
+  { route: '/enrolment-readiness', file: 'enrolment-readiness.html', expect: 'Terms you will see', settle: 1500 },
+  { route: '/privacy', file: 'privacy.html', expect: 'The short version', settle: 800 },
+  { route: '/terms', file: 'terms.html', expect: 'What BloomAbroad is not', settle: 800 },
+  { route: '/contact', file: 'contact.html', expect: 'Making sure it', settle: 800 },
+  { route: '/complaints', file: 'complaints.html', expect: 'How to make a complaint', settle: 800 },
+  { route: '/cookies', file: 'cookies.html', expect: 'The cookies we set', settle: 800 },
+  // The archived backup: prerendered so its noindex tag is in the static HTML.
+  { route: '/old', file: 'old.html', expect: 'archived copy', settle: 2000 },
+]
+
+// /about is a hidden draft until READY.about is switched on (preview builds show it).
+if (isReady('about') || showDraftsFromEnv()) {
+  ROUTES.push({ route: '/about', file: 'about.html', expect: 'Who is behind BloomAbroad', settle: 1500 })
+}
+
+// The guides hub, and one page per guide. Drafts are rendered only on preview
+// builds (VITE_SHOW_DRAFTS=1), exactly as the site itself includes them.
+ROUTES.push({ route: '/guides', file: 'guides.html', expect: 'in plain English', settle: 1500 })
+for (const g of loadGuides({ includeDrafts: showDraftsFromEnv() })) {
+  ROUTES.push({
+    route: `/guides/${g.slug}`,
+    file: `guides/${g.slug}.html`,
+    expect: 'Last reviewed',
+    settle: 1500,
+  })
+}
+
+/** Render one route and return its final HTML. Throws if it looks wrong. */
+async function renderRoute(browser, baseUrl, { route, expect, settle }) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 2400 } })
+  try {
+    await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle', timeout: 30000 })
+
+    // Let scroll-reveal animations settle so the snapshot is complete.
+    await page.waitForTimeout(settle)
+
+    // The cookie banner appears for any visitor with no saved choice, which
+    // is every fresh browser — including this one. It's per-visitor UI, not
+    // page content, so it must not be baked into the static HTML.
+    await page.evaluate(() => {
+      document.querySelectorAll('[data-cookie-banner]').forEach((el) => el.remove())
+      const root = document.documentElement
+      root.style.removeProperty('--cookie-bar-h')
+      if (!root.getAttribute('style')) root.removeAttribute('style')
+    })
+
+    const html = await page.content()
+    if (!html.includes(expect) || html.includes('id="root"></div>')) {
+      throw new Error(`rendered HTML is missing "${expect}" (or #root is empty)`)
+    }
+    // Vite's lazy-chunk preload links are captured with this build's temporary
+    // server address. Make them site-relative so the live pages never point at 127.0.0.1.
+    return html.split(baseUrl).join('')
+  } finally {
+    await page.close()
+  }
+}
+
 async function main() {
   const server = createServer((req, res) => {
     serveStatic(req, res).catch((err) => {
@@ -109,34 +185,64 @@ async function main() {
   })
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
   const { port } = server.address()
-  const url = `http://127.0.0.1:${port}/`
+  const baseUrl = `http://127.0.0.1:${port}`
 
-  const browser = await launchBrowser()
-  const page = await browser.newPage({ viewport: { width: 1280, height: 2400 } })
+  // On Vercel, Chrome runs in single-process mode, and closing one page can take the
+  // whole browser down, which made every page after the first fail. So there each page
+  // gets its own fresh browser, and one retry. Locally one shared browser is faster.
+  const freshPerPage = Boolean(process.env.VERCEL)
+  let shared = freshPerPage ? null : await launchBrowser()
 
-  console.log(`[prerender] loading ${url}`)
-  await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 })
-
-  // Let scroll-reveal (1200ms fallback) and count-up (1500ms fallback)
-  // finish settling so the snapshot has real, complete final content.
-  await page.waitForTimeout(2000)
-
-  const html = await page.content()
-  await browser.close()
-  await new Promise((resolve) => server.close(resolve))
-
-  if (!html.includes('The right student') || html.includes('id="root"></div>')) {
-    throw new Error(
-      'Prerendered HTML looks empty/unexpected — refusing to overwrite dist/index.html. ' +
-        'Check that the app actually rendered content.',
-    )
+  // Render EVERY route first and only then write files, so each route loads
+  // the original (empty) shell rather than a half-prerendered one.
+  const results = []
+  for (const spec of ROUTES) {
+    let html = null
+    let lastError = null
+    for (let attempt = 1; attempt <= (freshPerPage ? 2 : 1) && !html; attempt++) {
+      const browser = shared ?? (await launchBrowser())
+      try {
+        console.log(`[prerender] rendering ${spec.route}${attempt > 1 ? ' (retry)' : ''}`)
+        html = await renderRoute(browser, baseUrl, spec)
+      } catch (err) {
+        lastError = err
+        // A dead shared browser would fail every later page too. Start a new one.
+        if (!freshPerPage) shared = await launchBrowser().catch(() => shared)
+      } finally {
+        if (freshPerPage) await browser.close().catch(() => {})
+      }
+    }
+    if (!html) {
+      // One broken page must not stop the others, or the deploy.
+      console.error(
+        `[prerender] ✗ ${spec.route} FAILED — it will be served as a plain client-rendered page: ${lastError?.message}`,
+      )
+    }
+    results.push({ spec, html })
   }
 
-  const outPath = path.join(distDir, 'index.html')
-  await writeFile(outPath, html, 'utf8')
-  console.log(
-    `[prerender] ✓ SUCCESS — wrote ${html.length.toLocaleString()} chars of real HTML to dist/index.html`,
-  )
+  if (shared) await shared.close().catch(() => {})
+  await new Promise((resolve) => server.close(resolve))
+
+  let ok = 0
+  for (const { spec, html } of results) {
+    if (!html) continue
+    await mkdir(path.dirname(path.join(distDir, spec.file)), { recursive: true })
+    await writeFile(path.join(distDir, spec.file), html, 'utf8')
+    console.log(
+      `[prerender] ✓ ${spec.route} -> dist/${spec.file} (${html.length.toLocaleString()} chars)`,
+    )
+    ok++
+  }
+
+  if (ok === ROUTES.length) {
+    console.log(`[prerender] ✓ SUCCESS — all ${ok} pages prerendered`)
+  } else {
+    console.error(
+      `[prerender] ✗ PARTIAL — ${ok} of ${ROUTES.length} pages prerendered. ` +
+        'The rest still work for visitors, but crawlers see an empty shell for them.',
+    )
+  }
 }
 
 main().catch((err) => {

@@ -272,6 +272,8 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Set by the cookie banner (CookieConsent) so it never covers page text. */
+  padding-bottom: var(--cookie-bar-h, 0px);
 }
 
 .font-serif {
@@ -515,3 +517,57 @@ body {
     transform: none !important;
   }
 }
+
+/* ---- Guides: article body (rendered from markdown) ---------------------- */
+.guide-body {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--foreground);
+}
+.guide-body > :first-child { margin-top: 0; }
+.guide-body h2 {
+  margin: 2.75rem 0 0.75rem;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--heading);
+  scroll-margin-top: 6rem;
+}
+.guide-body h3 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--heading);
+  scroll-margin-top: 6rem;
+}
+.guide-body p { margin: 1rem 0; }
+.guide-body ul, .guide-body ol { margin: 1rem 0; padding-left: 1.4rem; }
+.guide-body ul { list-style: disc; }
+.guide-body ol { list-style: decimal; }
+.guide-body li { margin: 0.45rem 0; padding-left: 0.2rem; }
+.guide-body li::marker { color: var(--signal, var(--primary)); font-weight: 700; }
+.guide-body a { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+.guide-body a:hover { opacity: 0.8; }
+.guide-body strong { color: var(--heading); font-weight: 700; }
+.guide-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 3px solid var(--signal, var(--primary));
+  color: var(--muted-foreground);
+}
+.guide-body table {
+  display: block;
+  width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.guide-body th, .guide-body td {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.guide-body th { font-weight: 700; color: var(--heading); background: color-mix(in oklab, var(--secondary) 55%, transparent); }

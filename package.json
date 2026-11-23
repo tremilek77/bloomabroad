@@ -5,16 +5,22 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/prerender.mjs",
+    "build": "node scripts/check-guides.mjs && node scripts/generate-sitemap.mjs && tsc -b && vite build && node scripts/prerender.mjs && node scripts/check-placeholders.mjs && node scripts/check-seo.mjs && node scripts/check-voice.mjs",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:seo": "node scripts/check-seo.mjs && node scripts/check-voice.mjs",
+    "check:guides": "node scripts/check-guides.mjs",
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "check:placeholders": "node scripts/check-placeholders.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@supabase/supabase-js": "^2.110.7",
+    "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.24.0",
+    "marked": "^18.2.1",
     "motion": "^12.42.2",
     "radix-ui": "^1.6.2",
     "react": "^19.2.7",

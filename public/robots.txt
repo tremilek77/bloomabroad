@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /old
+Disallow: /confirm
 
 Sitemap: https://bloomabroad.vercel.app/sitemap.xml

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useAudience } from './audience'
 import { Reveal } from './saasta/Reveal'
-import { FAQS, type Faq as FaqItem } from '@/lib/faqs'
+import { FAQS, type Faq as FaqItem } from '@/old/lib/faqs'
 
 /**
  * FAQPage structured data covering both audiences (both are present in the
