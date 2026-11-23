@@ -187,25 +187,41 @@ async function main() {
   const { port } = server.address()
   const baseUrl = `http://127.0.0.1:${port}`
 
-  const browser = await launchBrowser()
+  // On Vercel, Chrome runs in single-process mode, and closing one page can take the
+  // whole browser down, which made every page after the first fail. So there each page
+  // gets its own fresh browser, and one retry. Locally one shared browser is faster.
+  const freshPerPage = Boolean(process.env.VERCEL)
+  let shared = freshPerPage ? null : await launchBrowser()
 
   // Render EVERY route first and only then write files, so each route loads
   // the original (empty) shell rather than a half-prerendered one.
   const results = []
   for (const spec of ROUTES) {
-    try {
-      console.log(`[prerender] rendering ${spec.route}`)
-      results.push({ spec, html: await renderRoute(browser, baseUrl, spec) })
-    } catch (err) {
+    let html = null
+    let lastError = null
+    for (let attempt = 1; attempt <= (freshPerPage ? 2 : 1) && !html; attempt++) {
+      const browser = shared ?? (await launchBrowser())
+      try {
+        console.log(`[prerender] rendering ${spec.route}${attempt > 1 ? ' (retry)' : ''}`)
+        html = await renderRoute(browser, baseUrl, spec)
+      } catch (err) {
+        lastError = err
+        // A dead shared browser would fail every later page too. Start a new one.
+        if (!freshPerPage) shared = await launchBrowser().catch(() => shared)
+      } finally {
+        if (freshPerPage) await browser.close().catch(() => {})
+      }
+    }
+    if (!html) {
       // One broken page must not stop the others, or the deploy.
       console.error(
-        `[prerender] ✗ ${spec.route} FAILED — it will be served as a plain client-rendered page: ${err.message}`,
+        `[prerender] ✗ ${spec.route} FAILED — it will be served as a plain client-rendered page: ${lastError?.message}`,
       )
-      results.push({ spec, html: null })
     }
+    results.push({ spec, html })
   }
 
-  await browser.close()
+  if (shared) await shared.close().catch(() => {})
   await new Promise((resolve) => server.close(resolve))
 
   let ok = 0
