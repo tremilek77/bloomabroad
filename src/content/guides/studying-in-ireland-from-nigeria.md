@@ -37,7 +37,7 @@ The official list of visa-required nationalities can change. The version we chec
 
 ## What are the steps to study in Ireland from Nigeria?
 
-There are seven steps: choose an eligible course, apply to the college, get your letter of acceptance, pay your fees to the required level, apply for your visa on AVATS, wait for the decision, and register with immigration after you arrive if you stay longer than 90 days.
+There are seven steps, from choosing an eligible course to registering with immigration after you arrive. They run in a fixed order, and your fees must be paid to the required level before you apply. Registration applies if you will stay longer than 90 days.
 
 1. **Choose a course that meets Ireland's rules.** The Irish Immigration Service says to read its policy on non-EEA nationals studying in Ireland and to make sure you meet it before you apply for a visa.
 2. **Apply to the college.** Check the entry requirements for your course first. Admission decisions are made by the college.
@@ -49,7 +49,7 @@ There are seven steps: choose an eligible course, apply to the college, get your
 
 ## What does a study visa application include?
 
-Ireland asks for a signed AVATS summary form, the visa fee, your passport and a set of supporting documents. These include a letter of acceptance, proof of fee payment, evidence of your academic and English ability, medical insurance and an application letter. Missing documents can lead to refusal.
+Ireland asks for a signed AVATS summary form, the visa fee, your passport and a set of supporting documents. Those include a letter of acceptance and proof of fee payment. Evidence of your academic and English ability, medical insurance and an application letter are on the list too. Missing documents can lead to refusal.
 
 The official page lists every document. The main ones are:
 
@@ -68,7 +68,7 @@ Send original documents on paper. The Irish Immigration Service does not accept 
 
 ## How much money does Ireland ask students to show?
 
-For academic courses starting after 1 July 2023, visa-required students must show immediate access to at least €10,000 for a one-year course, which Ireland gives as the estimated cost of living for a year. Longer courses need ready access to the same amount for each later year. Courses under eight months use €833 a month, or €6,665 if that is lower.
+Visa-required students on academic courses starting after 1 July 2023 must show immediate access to at least €10,000 for a one-year course. Ireland gives that as the estimated cost of living for a year. Longer courses need ready access to the same amount for each later year. Courses under eight months use €833 a month, or €6,665 if that is lower.
 
 These figures are for living costs and are in addition to your course fees. The Irish Immigration Service lists the evidence it accepts on its student finances page, linked under Sources, and updates the figures from time to time.
 
@@ -88,7 +88,7 @@ Keep your passport, your letter of acceptance and your other original documents 
 
 ## What if the student is under 18?
 
-Unaccompanied students under 18 need extra documents, including the birth certificate, notarised consent from both parents or legal guardians, and accommodation details. The Irish Immigration Service also says under-18s need a guardian in Ireland. Where a parent is not staying with the student, the school seeks Garda clearance for the place where the student will live.
+Unaccompanied students under 18 need extra documents. These include the birth certificate, notarised consent from both parents or legal guardians, and accommodation details. The Irish Immigration Service also says under-18s need a guardian in Ireland. Where a parent is not staying with the student, the school seeks Garda clearance for the place where the student will live.
 
 The official page sets out every requirement for under-18s, including what applies when only one parent has custody or when a parent travels with the student.
 

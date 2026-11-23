@@ -162,3 +162,20 @@ up, quotes with consent.
 
 **Still needs Remi:** real numbers, testimonials, photos, Dr Kolawole's agreement for `/about`, and a
 read of the glossary and `/how-we-assess` before they go live.
+
+## Guides drafted, 23 Nov 2026
+
+Both are drafts (hidden on the live site) and wait for Dr Kolawole's review.
+
+- `why-study-visas-are-refused-after-an-offer` (brief guide 3): why a visa can be refused after an offer, the
+  problems the Irish authorities name, how serious false or missing information is, the refusal figures for
+  Nigeria, and what to do after a refusal. Built only from official pages plus one news report.
+  **Needs:** a check of the refusal figures against the Department of Justice's own data, a decision on
+  whether the site shows refusal statistics at all, and Remi's anonymised "what we saw most often" section.
+- `irish-study-visa-requirements-nigeria-ghana-kenya` (brief guide 2): who needs a visa, where documents go
+  in each country, the core documents, the document rules, the money figures, and timings.
+  **Needs:** Remi to confirm how documents are submitted in practice in Nigeria, Ghana and Kenya, and the fee
+  line. The Kenya process is new from 15 May 2026.
+
+Both link to each other and to the Nigeria guide, and both were checked with `scripts/check-voice.mjs`
+(build with `VITE_SHOW_DRAFTS=1` to include drafts).

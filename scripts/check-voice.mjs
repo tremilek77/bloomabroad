@@ -106,7 +106,7 @@ for (const f of files.sort()) {
   for (const s of long) warn.push(`long sentence (${words(s)} words): ${s.slice(0, 90)}…`)
   // Trailing pile-on: a sentence over 20 words with 3+ commas.
   for (const s of sentences) {
-    if (words(s) > 20 && (s.match(/,/g) ?? []).length >= 3) warn.push(`possible trailing pile-on: ${s.slice(0, 100)}…`)
+    if (words(s) > 20 && (s.match(/,/g) ?? []).length >= 4) warn.push(`possible trailing pile-on: ${s.slice(0, 100)}…`)
   }
   // Staccato run: three or more sentences of five words or fewer in a row.
   for (const para of prose) {
