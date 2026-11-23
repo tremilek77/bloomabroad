@@ -35,7 +35,7 @@ const TOC = [
 
 const STEPS = [
   { title: 'You provide the facts', body: 'A short questionnaire and your documents, uploaded securely.' },
-  { title: 'Your profile is checked', body: 'Against expert-designed readiness scenarios, the same for everyone.' },
+  { title: 'Your profile is checked', body: 'Against expert-designed readiness scenarios.' },
   { title: 'A consultant reviews it', body: 'An experienced consultant checks every result.' },
   { title: 'You get your outcome', body: 'Within 5 working days, with the reasons and next steps.' },
 ]
@@ -154,7 +154,7 @@ export function HowWeAssessPage() {
         tone="tint"
         eyebrow="The method"
         title="Where does the methodology come from?"
-        lead="It rests on real student journeys and was designed by an expert, so the same facts always lead to the same assessment."
+        lead="It rests on real student journeys and was designed by an expert, and every assessment applies the same methodology."
       >
         <CardGrid
           items={[
@@ -202,7 +202,7 @@ export function HowWeAssessPage() {
               <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-signal">
                 <UserRoundCheck className="h-5 w-5" aria-hidden />
               </span>
-              <h3 className="text-base font-bold text-heading">Why you can trust the result</h3>
+              <h3 className="text-base font-bold text-heading">How results are checked</h3>
               <p className="mt-3 text-[15px] leading-relaxed text-foreground/85">
                 Every assessment applies the same methodology, and each outcome is recorded with
                 the reasoning behind it, so it can be audited. An experienced consultant reviews

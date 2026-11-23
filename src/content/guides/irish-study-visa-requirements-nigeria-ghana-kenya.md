@@ -2,7 +2,7 @@
 title: Ireland Study Visa: Nigeria, Ghana, Kenya | BloomAbroad
 h1: Irish study visa requirements: what applicants from Nigeria, Ghana and Kenya should know
 description: Do students from Nigeria, Ghana and Kenya need a visa to study in Ireland? Where documents go in each country, the document rules and the money figures.
-answer: Students from Nigeria, Ghana and Kenya all need a visa to study in Ireland for more than three months. The requirements come from the Irish Immigration Service and are the same for everyone. Where you hand in your documents depends on your country, so check your Application Summary Form before you send anything.
+answer: Students from Nigeria, Ghana and Kenya all need a visa to study in Ireland for more than three months. The requirements come from the Irish Immigration Service. Where you hand in your documents depends on your country, so check your Application Summary Form before you send anything.
 audience: students
 keyword: Ireland student visa requirements
 published: false
@@ -40,7 +40,7 @@ Yes. Nigeria, Ghana and Kenya are all on Ireland's list of visa-required nationa
 
 Apply up to three months before you plan to travel. The visa fee is not refunded if your application is withdrawn or refused, and the Irish Immigration Service advises you not to buy a travel ticket before you have a decision.
 
-For the full order of steps, read our guide to [studying in Ireland from Nigeria](/guides/studying-in-ireland-from-nigeria). The steps are the same for Ghana and Kenya.
+For the full order of steps, read our guide to [studying in Ireland from Nigeria](/guides/studying-in-ireland-from-nigeria). The Immigration Service's process starts with the same online system, AVATS, whichever country you apply from.
 
 ## Where do I hand in my documents in Nigeria, Ghana and Kenya?
 
@@ -52,11 +52,11 @@ It depends on your country. The Embassy of Ireland in Abuja says applicants in N
 | Ghana | A VFS office in Ghana, which sends the application to the Embassy of Ireland in Abuja | The same process as Nigeria. |
 | Kenya | The VFS submission centre in Nairobi, for Kenyan and Kenyan-resident applicants, from 15 May 2026 | The embassy asks you to carry copies of your submitted documents when you travel, in case immigration officers inspect them. |
 
-The Abuja page gives the visa fee as the local-currency equivalent of €60 for a single-entry visa, plus the VFS fee. Your Application Summary Form shows the fee and the payment method for your own application, and it overrides anything you read second-hand.
+The Abuja page gives the visa fee as the local-currency equivalent of €60 for a single-entry visa, plus the VFS fee. Your Application Summary Form shows the fee and the payment method for your own application. Rely on it over anything you read second-hand, including this guide.
 
 ## Which documents does every applicant need?
 
-Every long-stay study applicant sends the same core documents, and a missing one may lead to refusal. The Irish Immigration Service lists them on one official page, and the details on that page are specific. Check each item there before you gather anything.
+The Irish Immigration Service lists the same core documents for long-stay study applicants, and says a missing one may lead to refusal. They are on one official page, and the details there are specific. Check each item before you gather anything.
 
 - A signed Application Summary Form and the fee
 - Your passport and photographs

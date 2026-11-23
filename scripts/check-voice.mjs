@@ -43,6 +43,24 @@ const BANS = [
   [/!/, 'exclamation point'],
 ]
 
+// Absolute wording. Allowed only where the client's brief says it (see docs/client-claims.md).
+const ABSOLUTE = /\b(always|never|guarantee[sd]?|100%|everyone|no one|best|leading|proven|certain(?:ly)?|definitely|zero)\b/i
+const CLIENT_ABSOLUTES = [
+  /never ask you for money/i,
+  /never (?:handle|take payment|sell|by bank transfer)/i,
+  /(?:doesn't|does not|don't) guarantee/i,
+  /no one can (?:promise|guarantee)/i,
+  /guarantee any outcome|promise or guarantee/i,
+  /never (?:be )?pre-?ticked/i,
+  /never describe/i,
+  /always check (?:the )?official/i,
+  /always see the exact amount/i,
+  /never ask you to pay/i,
+  /what we will never do/i,
+  /same price, every outcome/i,
+  /\b(?:says|said|states|told)\b/i, // attributed to a named source
+]
+
 // Words that are fine in context but the broad regex above would catch.
 const ALLOW = [/the future of (?:studying|their|your)/i]
 
@@ -102,6 +120,14 @@ for (const f of files.sort()) {
   }
 
   const warn = []
+  // Absolute claims are only for things the client's brief states outright. Anything else should be
+  // attributed ("the Immigration Service says") or softened. Flagged for review, not failed.
+  for (const line of lines) {
+    for (const sent of split(line)) {
+      if (ABSOLUTE.test(sent) && !CLIENT_ABSOLUTES.some((re) => re.test(sent)))
+        warn.push(`absolute claim, check the brief says it: ${sent.slice(0, 110)}`)
+    }
+  }
   const long = sentences.filter((s) => words(s) > 32)
   for (const s of long) warn.push(`long sentence (${words(s)} words): ${s.slice(0, 90)}…`)
   // Trailing pile-on: a sentence over 20 words with 3+ commas.

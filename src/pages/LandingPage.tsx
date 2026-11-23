@@ -76,7 +76,7 @@ const WE_ARE_NOT = [
   'We do not apply for you or send you to any institution',
   'We give no visa advice and make no visa decisions',
   'We cannot promise admission or any other outcome',
-  'Official guidance from universities and the immigration service always comes first',
+  'Our view sits alongside official guidance from universities and the immigration service',
 ]
 
 /** Four questions for the front door, picked from the existing FAQ sets by wording. */

@@ -46,7 +46,7 @@ const GLOSSARY: { term: string; def: string }[] = [
   },
   {
     term: 'Immigration readiness',
-    def: 'Whether an applicant is positioned to meet immigration requirements. BloomAbroad checks readiness only. It does not give immigration advice or make decisions.',
+    def: 'Whether an applicant is positioned to meet immigration requirements. BloomAbroad gives a readiness view. It does not give visa advice or make visa decisions.',
   },
   {
     term: 'QQI (Quality and Qualifications Ireland)',
@@ -177,7 +177,7 @@ export function EnrolmentReadinessPage() {
               </p>
               <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
                 It looks at whether your situation and documents are ready for the immigration
-                step. BloomAbroad checks readiness only. Official requirements are set by
+                step. BloomAbroad gives a readiness view. Official requirements are set by
                 Ireland's immigration authorities at{' '}
                 <a
                   href="https://www.irishimmigration.ie"

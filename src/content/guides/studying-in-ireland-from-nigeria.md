@@ -101,4 +101,4 @@ Two more points need a clear, honest explanation:
 - **Gaps in your education history.** Account for the time, with your employment history.
 - **A course that doesn't follow on from your past study or work.** Your application letter must give your reasons and support them with evidence if you have it.
 
-Gather your academic documents early and check every name and date against your passport. Our [free Ireland Readiness Checklist](/checklist) gives you a personal list of what to prepare. It is a starting point, not an assessment.
+Gather your academic documents early and check the names and dates against your passport. Our [free Ireland Readiness Checklist](/checklist) gives you a personal list of what to prepare. It is a starting point, not an assessment.

@@ -42,14 +42,14 @@ Two practical points from the same pages. The visa fee isn't refunded if your ap
 
 ## What reasons for refusal does Ireland give?
 
-The Irish authorities name five problems. They are incomplete documents, a missing certified translation, information they cannot verify, an earlier visa refusal you did not disclose, and false or misleading information. Only your own refusal letter tells you why your application was refused.
+The Irish authorities name five problems. They are incomplete documents, a missing certified translation, information they cannot verify, an earlier visa refusal you did not disclose, and false or misleading information. Your own refusal letter states the reasons for your decision.
 
 | What goes wrong | What the official pages say |
 | --- | --- |
 | Missing documents | If you don't send the required documents, your application may be refused. |
 | No certified translation | A document not in English or Irish needs a full certified translation. The Abuja embassy lists a missing translation as a ground for refusal. |
 | Information that can't be checked | The Abuja embassy can refuse when it cannot verify what you supplied. Letters from a college, employer or other organisation must be original, on headed paper, with contact details that can be checked. |
-| An earlier refusal you didn't mention | Any earlier visa refusal, from any country, must be disclosed with the original refusal letter. Leaving it out leads to refusal. |
+| An earlier refusal you didn't mention | Any earlier visa refusal, from any country, must be disclosed with the original refusal letter. The Immigration Service says leaving it out will lead to refusal. |
 | False or misleading information | Your application may be refused, and in some cases you cannot appeal and may be blocked from getting an Irish visa for five years. |
 
 Two more points are not described as grounds for refusal, but the Immigration Service asks you to explain them in writing. One is any gap in your education history. The other is a course that doesn't follow on from your earlier study or work. For that one, your application letter must give valid reasons and support them with evidence if you have it.
@@ -58,7 +58,7 @@ The pages we checked don't say how often each problem leads to a refusal, so the
 
 ## How serious is false or missing information?
 
-It is the most serious one on the list. The Irish Immigration Service says false or misleading information may mean a refusal with no right of appeal and a block of up to five years on getting an Irish visa. The Embassy of Ireland in Abuja says it applies a zero tolerance policy to fraudulent applications.
+The consequences are the heaviest on the list. The Irish Immigration Service says false or misleading information may mean a refusal with no right of appeal and a block of up to five years on getting an Irish visa. The Embassy of Ireland in Abuja says it applies a zero tolerance policy to fraudulent applications.
 
 The embassy treats withheld information as deception too. It gives an earlier visa refusal as its example. It adds that when an application is sent as part of a group, every application in that group may be refused without appeal.
 
