@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { COUNTRY_GROUPS, OTHER_COUNTRY } from '@/lib/countries'
+import { COUNTRIES, OTHER_COUNTRY } from '@/lib/countries'
 
 /** Shared form pieces, used by the waitlist form and the checklist. */
 
@@ -66,23 +66,17 @@ export function inputCls(invalid: boolean) {
   )
 }
 
-/** The grouped country options from the brief (Fix 1), plus "Other". */
+/** The countries from the brief (Fix 1) as one flat list, plus "Other". */
 export function CountryOptions() {
   return (
     <>
       <option value="">Select your country</option>
-      {COUNTRY_GROUPS.map((g) => (
-        <optgroup key={g.label} label={g.label}>
-          {g.countries.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </optgroup>
+      {COUNTRIES.map((c) => (
+        <option key={c} value={c}>
+          {c}
+        </option>
       ))}
-      <optgroup label="Other">
-        <option value={OTHER_COUNTRY}>Other</option>
-      </optgroup>
+      <option value={OTHER_COUNTRY}>Other</option>
     </>
   )
 }

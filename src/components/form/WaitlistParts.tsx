@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Check, Loader2 } from 'lucide-react'
 import { Reveal } from '@/components/saasta/Reveal'
 import { CONSENT_TEXT } from '@/content/formOptions'
@@ -103,10 +104,18 @@ export function FormError({ message }: { message: string | null }) {
 }
 
 export function Success({ title, children }: { title: string; children: React.ReactNode }) {
+  // The form is replaced by this message, which is shorter, so the page can jump past it.
+  // Bring it back into view as soon as it appears.
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [])
+
   return (
     <div
+      ref={ref}
       role="status"
-      className="mx-auto mt-10 flex max-w-md flex-col items-center gap-4 rounded-2xl border border-border bg-card p-10"
+      className="mx-auto mt-10 flex max-w-md scroll-mt-28 flex-col items-center gap-4 rounded-2xl border border-border bg-card p-10"
     >
       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-signal text-signal-foreground">
         <Check className="h-6 w-6" strokeWidth={3} />

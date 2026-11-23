@@ -29,5 +29,8 @@ export const COUNTRY_GROUPS: { label: string; countries: string[] }[] = [
   },
 ]
 
+/** The same countries as one flat list, in the brief's order. The form shows this one. */
+export const COUNTRIES: string[] = COUNTRY_GROUPS.flatMap((g) => g.countries)
+
 /** Choosing this opens a text box: "Please tell us which country". */
 export const OTHER_COUNTRY = 'Other'
