@@ -16,6 +16,8 @@ const pages = [
   ['/universities', 'monthly', '0.9'],
   ['/pricing', 'monthly', '0.8'],
   ['/nigeria', 'monthly', '0.8'],
+  ['/how-we-assess', 'monthly', '0.8'],
+  ['/enrolment-readiness', 'monthly', '0.8'],
   ['/checklist', 'monthly', '0.8'],
   ['/verify', 'yearly', '0.5'],
   ['/contact', 'yearly', '0.5'],

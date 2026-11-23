@@ -11,6 +11,8 @@ BloomAbroad does not make admission, visa or immigration decisions, and no outco
 ## Key pages
 - [For students and families](https://bloomabroad.vercel.app/students): what the readiness check covers, how it works, FAQs
 - [For universities](https://bloomabroad.vercel.app/universities): enrolment readiness screening for international applications
+- [How we assess](https://bloomabroad.vercel.app/how-we-assess): the methodology, the process, the three outcomes, and what BloomAbroad does not do
+- [What is enrolment readiness?](https://bloomabroad.vercel.app/enrolment-readiness): a plain-English definition, the two parts, and a glossary of Irish study terms
 - [Studying in Ireland from Nigeria](https://bloomabroad.vercel.app/nigeria): readiness check for Nigerian students, with prices in naira
 - [Pricing](https://bloomabroad.vercel.app/pricing): Readiness Assessment €30, Plus €65, founding prices, local prices in naira, shillings and cedis
 - [Free Ireland Readiness Checklist](https://bloomabroad.vercel.app/checklist): a free 2-minute quiz that returns a personal list of what to prepare. It is not an assessment
@@ -28,4 +30,4 @@ Ready to Apply · Needs Support · Not Yet in a Position to Apply. Results are i
 - Readiness Assessment Plus (adds a 30-minute consultant call): €65. Founding price: €39
 - The price is the same whatever the outcome. 14-day right to cancel, as set out in the Terms.
 
-Last updated: 18 November 2026
+Last updated: 23 November 2026

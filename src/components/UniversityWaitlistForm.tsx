@@ -82,8 +82,8 @@ export function UniversityWaitlistForm({
       {done ? (
         <Success title="You're on the list.">
           <p className="text-sm text-muted-foreground">
-            Thanks for your interest. We'll be in touch with early-access updates. No spam,
-            unsubscribe anytime.
+            Thanks for your interest. We'll be in touch with early-access updates, and you can
+            unsubscribe at any time.
           </p>
         </Success>
       ) : (
@@ -138,7 +138,7 @@ export function UniversityWaitlistForm({
           <FormError message={submitError} />
 
           <p className="text-center text-sm text-muted-foreground">
-            No spam. Just updates on early access. Unsubscribe anytime.
+            We only send early-access updates, and you can unsubscribe at any time.
           </p>
         </form>
       )}

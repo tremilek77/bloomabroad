@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 import { Ban, Globe, Lock, Mail, MessageCircle, UserCheck } from 'lucide-react'
 import { PageShell } from '@/components/PageShell'
 import { Hero } from '@/components/blocks/Hero'
+import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { Section } from '@/components/blocks/Section'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { Reveal } from '@/components/saasta/Reveal'
@@ -73,6 +74,7 @@ export function VerifyPage() {
           </ButtonLink>
         }
       />
+      <PageMetaBar path={PATH} minutes={2} />
 
       <Section tone="card" eyebrow="The real BloomAbroad" title="Where to find us">
         <div className="grid gap-5 md:grid-cols-2">

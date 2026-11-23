@@ -24,6 +24,8 @@ const PAGES = [
   { file: 'nigeria.html', route: '/nigeria', marketing: true },
   { file: 'pricing.html', route: '/pricing', marketing: true },
   { file: 'verify.html', route: '/verify', marketing: true },
+  { file: 'how-we-assess.html', route: '/how-we-assess', marketing: true },
+  { file: 'enrolment-readiness.html', route: '/enrolment-readiness', marketing: true },
   { file: 'privacy.html', route: '/privacy' },
   { file: 'terms.html', route: '/terms' },
   { file: 'contact.html', route: '/contact' },
@@ -71,6 +73,7 @@ for (const { file, route, marketing } of PAGES) {
   const h1s = (html.match(/<h1[\s>]/g) ?? []).length
 
   if (h1s !== 1) fail(file, `expected exactly one <h1>, found ${h1s}`)
+  if (/127\.0\.0\.1|localhost:\d+/.test(html)) fail(file, 'contains a localhost address (prerender server leaked into the HTML)')
   if (!canonical.endsWith(route === '/' ? '/' : route)) fail(file, `canonical "${canonical}" doesn't match ${route}`)
   if (marketing) {
     const t = [...title].length

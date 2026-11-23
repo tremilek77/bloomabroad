@@ -7,6 +7,7 @@ import { Section } from '@/components/blocks/Section'
 import { CardGrid } from '@/components/blocks/Cards'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
+import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { Table } from '@/components/legal/Prose'
 import { StudentWaitlistForm } from '@/components/StudentWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
@@ -124,6 +125,7 @@ export function PricingPage() {
         }
         note="Bookings open January 2027."
       />
+      <PageMetaBar path={PATH} minutes={3} />
 
       <Section width="wide">
         {/* Currency switcher */}
@@ -225,6 +227,33 @@ export function PricingPage() {
           Local prices are set in advance, rounded, and reviewed regularly.
           {!LOCAL_PRICES_CONFIRMED && ' They are approximate for now, and checkout is in euro.'}{' '}
           You'll always see the exact amount before you pay.
+        </p>
+      </Section>
+
+      <Section
+        id="compare"
+        eyebrow="Compare"
+        title="Which one is right for you?"
+        lead="Start with the free checklist if you are unsure. Choose the Assessment for a full readiness outcome, and Plus if you also want to talk it through."
+        width="narrow"
+      >
+        <Table
+          head={['', 'Free checklist', 'Readiness Assessment', 'Assessment Plus']}
+          rows={[
+            ['Price', 'Free', `€${PRICES.assessment.eur}`, `€${PRICES.plus.eur}`],
+            ['What you get', 'A personal list of what to prepare', 'Your readiness outcome, with reasons and next steps', 'Everything in the Assessment'],
+            ['Checks application and immigration readiness', 'No, a general starting point', 'Yes', 'Yes'],
+            ['Reviewed by an experienced consultant', 'No', 'Yes', 'Yes'],
+            ['Summary for parents or sponsors', 'No', 'Yes', 'Yes'],
+            ['30-minute call with a consultant', 'No', 'No', 'Yes'],
+            ['Time', 'About 2 minutes', 'Outcome within 5 working days', 'Outcome within 5 working days'],
+          ]}
+        />
+        <p className="mt-4 text-sm text-muted-foreground">
+          Prices above are in euro. Use the currency switcher at the top for local prices.{' '}
+          <Link to="/how-we-assess" className="font-semibold text-primary underline-offset-4 hover:underline">
+            See how we assess →
+          </Link>
         </p>
       </Section>
 

@@ -16,6 +16,8 @@ type SiteLink = { label: string; href: string; ready: boolean }
 
 /** Links shared by every page. */
 const COMMON: SiteLink[] = [
+  { label: 'How we assess', href: '/how-we-assess', ready: true },
+  { label: 'What is enrolment readiness?', href: '/enrolment-readiness', ready: true },
   { label: 'About', href: '/about', ready: READY.about },
   { label: 'Guides', href: '/guides', ready: hasGuides },
   { label: 'Contact', href: '/contact', ready: true },

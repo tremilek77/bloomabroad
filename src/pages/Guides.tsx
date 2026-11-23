@@ -16,7 +16,7 @@ const TITLE = 'Guides to Studying in Ireland for International Students'
 const DESCRIPTION =
   'Plain-English guides to studying in Ireland, from visa requirements to English tests, for students, parents and universities. Written and reviewed by an expert.'
 const ANSWER =
-  "BloomAbroad's guides explain how to study in Ireland in plain English, from choosing a course to meeting immigration requirements. Each guide is written for students and families or for universities, reviewed by Dr Olaniyi Kolawole, and links to official sources, so you can check every fact yourself."
+  "BloomAbroad's guides explain how to study in Ireland in plain English, from choosing a course to meeting immigration requirements. Each guide is for students and families or for universities. Dr Olaniyi Kolawole reviews it, and it links to official sources so you can check every fact yourself."
 
 function GuideCard({ g, delay }: { g: Guide; delay: number }) {
   return (

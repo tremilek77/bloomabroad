@@ -92,7 +92,7 @@ export const UNIVERSITY_FAQS: Faq[] = [
   { q: 'What is BloomAbroad?', a: ANSWER_UNIVERSITIES },
   {
     q: 'How will it fit our workflow?',
-    a: 'Partner institutions will have a secure login. Your team uploads applications already received, the platform flags what is missing, you send applicants a secure assessment link, review the readiness report, and decide.',
+    a: 'Partner institutions will have a secure login. Your team uploads applications already received, and the platform flags anything missing. You then send applicants a secure assessment link, review the readiness report and decide.',
   },
   {
     q: 'Does BloomAbroad make admissions decisions?',

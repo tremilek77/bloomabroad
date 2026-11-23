@@ -117,6 +117,8 @@ const ROUTES = [
   { route: '/nigeria', file: 'nigeria.html', expect: 'Planning for September 2027', settle: 1500 },
   { route: '/pricing', file: 'pricing.html', expect: 'Founding member offer', settle: 1500 },
   { route: '/verify', file: 'verify.html', expect: 'Where to find us', settle: 1500 },
+  { route: '/how-we-assess', file: 'how-we-assess.html', expect: 'How does an assessment work', settle: 1500 },
+  { route: '/enrolment-readiness', file: 'enrolment-readiness.html', expect: 'Terms you will see', settle: 1500 },
   { route: '/privacy', file: 'privacy.html', expect: 'The short version', settle: 800 },
   { route: '/terms', file: 'terms.html', expect: 'What BloomAbroad is not', settle: 800 },
   { route: '/contact', file: 'contact.html', expect: 'Making sure it', settle: 800 },
@@ -166,7 +168,9 @@ async function renderRoute(browser, baseUrl, { route, expect, settle }) {
     if (!html.includes(expect) || html.includes('id="root"></div>')) {
       throw new Error(`rendered HTML is missing "${expect}" (or #root is empty)`)
     }
-    return html
+    // Vite's lazy-chunk preload links are captured with this build's temporary
+    // server address. Make them site-relative so the live pages never point at 127.0.0.1.
+    return html.split(baseUrl).join('')
   } finally {
     await page.close()
   }

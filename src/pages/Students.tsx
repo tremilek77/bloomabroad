@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import {
   Compass,
+  FileText,
   ListChecks,
   LockKeyhole,
   Search,
@@ -16,13 +17,16 @@ import { Steps } from '@/components/blocks/Steps'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
-import { SampleOutcomeCard } from '@/components/previews/SampleOutcomeCard'
+import { ReportCoversCard } from '@/components/previews/ReportCoversCard'
+import { IconList } from '@/components/blocks/IconList'
+import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { StudentWaitlistForm } from '@/components/StudentWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
 import { usePageMeta } from '@/lib/seo'
 import { faqNode, useSchema, webPageNode } from '@/lib/schema'
 import { ANSWER_STUDENTS, PARENT_FAQS, STUDENT_FAQS } from '@/content/faqs'
 import { FOUNDER, READY } from '@/content/site'
+import { OUTCOMES } from '@/content/outcomes'
 
 const PATH = '/students'
 const TITLE = 'Check Your Readiness to Study in Ireland | BloomAbroad'
@@ -53,22 +57,50 @@ const STEPS = [
   },
 ]
 
-const OUTCOMES = [
+const TOC = [
+  { id: 'how', label: 'How it works' },
+  { id: 'report', label: 'Your report' },
+  { id: 'fit', label: 'Is this for you?' },
+  { id: 'parents', label: 'Parents and sponsors' },
+  { id: 'faq', label: 'FAQs' },
+]
+
+const REPORT = [
   {
-    name: 'Ready to Apply',
-    body: 'Your profile is in good shape.',
-    cls: 'border-signal/30 bg-signal/10',
+    icon: Compass,
+    title: 'Where you stand',
+    body: 'One of three clear outcomes, so you know whether to apply now, strengthen first, or plan ahead.',
   },
   {
-    name: 'Needs Support',
-    body: "You're close. We show you what to strengthen first.",
-    cls: 'border-amber-500/30 bg-amber-500/10',
+    icon: Search,
+    title: "What's strong, and what's missing",
+    body: 'Your application readiness and immigration readiness, with the reasons behind each finding.',
   },
   {
-    name: 'Not Yet in a Position to Apply',
-    body: 'Not the right time. We explain why, so you can plan ahead.',
-    cls: 'border-border bg-secondary/40',
+    icon: ListChecks,
+    title: 'What to do next',
+    body: 'Next steps for your situation, in order, so you know what to tackle first.',
   },
+  {
+    icon: UserCheck,
+    title: 'A summary for parents and sponsors',
+    body: 'Written so the people supporting you can follow the outcome and the plan.',
+  },
+]
+
+const LOOKS_AT = ['your qualifications', 'your course choice', 'your English', 'your documents', 'how it all fits together']
+
+const GOOD_FIT = [
+  'You plan to study in Ireland at undergraduate or postgraduate level',
+  'You want to know where you stand before you pay for applications and tests',
+  'You are a parent or sponsor who wants a clear view before committing',
+]
+
+const NOT_WHAT_WE_DO = [
+  'Apply to universities for you, or send you to any institution',
+  'Prepare, source or advise on financial documents',
+  'Give visa advice or make visa decisions. Always check the official guidance',
+  'Promise admission or any other outcome',
 ]
 
 const PARENTS = [
@@ -138,8 +170,9 @@ export function StudentsPage() {
             )}
           </>
         }
-        aside={<SampleOutcomeCard />}
+        aside={<ReportCoversCard />}
       />
+      <PageMetaBar path={PATH} minutes={5} toc={TOC} />
 
       <Section tone="card" eyebrow="Why check first?" title="Know before you commit">
         <CardGrid items={WHY} />
@@ -162,6 +195,46 @@ export function StudentsPage() {
             </li>
           ))}
         </ul>
+      </Section>
+
+      <Section
+        id="report"
+        eyebrow="Your report"
+        title="What does your readiness report cover?"
+        lead="A written account of where you stand and what to do about it, with the reasons shown."
+      >
+        <CardGrid items={REPORT} cols={2} />
+        <Reveal>
+          <div className="mt-6 flex gap-4 rounded-2xl border border-border bg-card p-6">
+            <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-signal">
+              <FileText className="h-5 w-5" aria-hidden />
+            </span>
+            <div>
+              <h3 className="text-base font-bold text-heading">What the assessment looks at</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
+                It looks at {LOOKS_AT.join(', ')}. Not just your grades. An experienced consultant
+                reviews every result, and the reasoning is recorded.
+              </p>
+              <p className="mt-3 text-sm">
+                <Link to="/how-we-assess" className="font-semibold text-primary underline-offset-4 hover:underline">
+                  See how we assess →
+                </Link>
+              </p>
+            </div>
+          </div>
+        </Reveal>
+      </Section>
+
+      <Section id="fit" tone="tint" eyebrow="Is this for you?" title="Who it helps, and what it does not do">
+        <div className="grid gap-5 md:grid-cols-2">
+          <IconList title="A good fit if" items={GOOD_FIT} tone="yes" />
+          <IconList title="What we do not do" items={NOT_WHAT_WE_DO} tone="no" delay={0.07} />
+        </div>
+        <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
+          To start you will usually need your passport and your academic certificates and
+          transcripts. English test results help if you have them. We tell you exactly what's
+          needed when you begin.
+        </p>
       </Section>
 
       {READY.checklist && (

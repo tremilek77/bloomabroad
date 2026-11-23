@@ -21,6 +21,11 @@ const GuidesPage = lazyPage(() => import('@/pages/Guides'), 'GuidesPage')
 const GuidePage = lazyPage(() => import('@/pages/Guide'), 'GuidePage')
 const PricingPage = lazyPage(() => import('@/pages/Pricing'), 'PricingPage')
 const VerifyPage = lazyPage(() => import('@/pages/Verify'), 'VerifyPage')
+const HowWeAssessPage = lazyPage(() => import('@/pages/HowWeAssess'), 'HowWeAssessPage')
+const EnrolmentReadinessPage = lazyPage(
+  () => import('@/pages/EnrolmentReadiness'),
+  'EnrolmentReadinessPage',
+)
 const PrivacyPage = lazyPage(() => import('@/pages/Privacy'), 'PrivacyPage')
 const TermsPage = lazyPage(() => import('@/pages/Terms'), 'TermsPage')
 const ContactPage = lazyPage(() => import('@/pages/Contact'), 'ContactPage')
@@ -91,6 +96,8 @@ function App() {
           <Route path="/guides/:slug" element={<GuidePage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/verify" element={<VerifyPage />} />
+          <Route path="/how-we-assess" element={<HowWeAssessPage />} />
+          <Route path="/enrolment-readiness" element={<EnrolmentReadinessPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/contact" element={<ContactPage />} />

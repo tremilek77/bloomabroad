@@ -140,3 +140,25 @@ The brief lists 3 launch guides, then 5 more. Best next, in order:
 - [Irish Immigration: TrustEd Ireland and Immigration Requirements (Feb 2026)](https://www.irishimmigration.ie/wp-content/uploads/2026/02/Policy-Statement-TrustEd-Ireland-and-Immigration-Requirements.pdf)
 - [An Garda Síochána: student fraud warning, 25 Aug 2026](https://www.garda.ie/en/about-us/our-departments/office-of-corporate-communications/press-releases/2026/august/25-08-2026-an-garda-siochana-issues-student-fraud-warning-ahead-of-cao-offers-25th-august-2026.html)
 - [Irish Examiner: Irish visa refusals by nationality, 17 Oct 2026](https://www.irishexaminer.com/news/arid-41925241.html)
+
+## Status, 23 Nov 2026
+
+**Decision:** no sample report. It could drift from what the real system produces. The site describes what
+the report covers (outcome, what is strong, what is missing, next steps, a summary for parents and
+sponsors) and shows no example applicant. The earlier fictional "Amara" card on /students is gone, and
+`READY.sample` stays false.
+
+**Built:** `/how-we-assess`, `/enrolment-readiness` (with glossary), homepage depth, `/students` report
+and fit sections, comparison table on `/pricing`, and a "Last updated · reading time · Spotted a mistake?"
+bar on every marketing page. Dates live in `src/content/updated.ts`: change a page's date whenever you
+change its wording or facts.
+
+**Voice rule:** every new line is checked against the copywriting skill's AI-tells list, and
+`scripts/check-voice.mjs` runs at the end of every build. It fails on contrast reveals, negation lists,
+stock openers, banned vocabulary, em dashes and exclamation points, and warns on long sentences and
+staccato runs. It cannot predict an AI detector's score, because those tools are unreliable and disagree.
+The strongest human signal is real material only the client has: Remi's own words, numbers she can back
+up, quotes with consent.
+
+**Still needs Remi:** real numbers, testimonials, photos, Dr Kolawole's agreement for `/about`, and a
+read of the glossary and `/how-we-assess` before they go live.

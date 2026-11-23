@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { COMPANY, SITE_URL, SOCIALS } from './company'
 import { FOUNDER, METHODOLOGY_ADVISER } from '@/content/site'
 import type { Faq } from '@/content/faqs'
+import { UPDATED } from '@/content/updated'
 
 /**
  * JSON-LD builders. Rules (schema skill): markup must match what's visible on
@@ -111,12 +112,14 @@ export function breadcrumbNode(crumbs: { name: string; path: string }[]) {
 }
 
 export function webPageNode(path: string, name: string, description: string) {
+  const dateModified = UPDATED[path]
   return {
     '@type': 'WebPage',
     '@id': `${SITE_URL}${path === '/' ? '/' : path}#webpage`,
     url: `${SITE_URL}${path === '/' ? '/' : path}`,
     name,
     description,
+    ...(dateModified ? { dateModified } : {}),
     isPartOf: { '@id': WEBSITE_ID },
     about: { '@id': ORG_ID },
     inLanguage: 'en-IE',

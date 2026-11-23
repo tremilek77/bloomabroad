@@ -7,6 +7,7 @@ import { CardGrid } from '@/components/blocks/Cards'
 import { Steps } from '@/components/blocks/Steps'
 import { TrustStrip } from '@/components/blocks/TrustStrip'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
+import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { WorkspacePreview } from '@/components/previews/WorkspacePreview'
@@ -110,6 +111,15 @@ export function UniversitiesPage() {
         }
         aside={<WorkspacePreview />}
       />
+      <PageMetaBar
+        path={PATH}
+        minutes={4}
+        toc={[
+          { id: 'how', label: 'How it will work' },
+          { id: 'faq', label: 'FAQs' },
+          { id: 'waitlist', label: 'Early access' },
+        ]}
+      />
 
       <Section
         tone="card"
@@ -148,7 +158,10 @@ export function UniversitiesPage() {
           </li>
           <li>
             Developed with input from international student directors at eight Irish
-            universities and colleges.
+            universities and colleges.{' '}
+            <Link to="/how-we-assess" className="font-semibold text-primary underline-offset-4 hover:underline">
+              See how we assess →
+            </Link>
           </li>
         </ul>
       </Section>

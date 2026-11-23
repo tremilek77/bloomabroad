@@ -367,7 +367,7 @@ export function StudentWaitlistForm({
           <FormError message={submitError} />
 
           <p className="text-center text-sm text-muted-foreground">
-            No spam. Just updates on early access. Unsubscribe anytime.
+            We only send launch updates, and you can unsubscribe at any time.
           </p>
         </form>
       )}
