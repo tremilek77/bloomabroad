@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { BloomMark } from './Logo'
+import { audienceFor, type Audience } from '@/lib/audience'
 import { READY } from '@/content/site'
 import { hasGuides } from '@/content/guides'
 import { openCookieSettings } from '@/lib/consent'
@@ -11,22 +12,50 @@ import { COMPANY, SOCIALS } from '@/lib/company'
  * Links to pages that aren't built yet are hidden by the READY flags in
  * content/site.ts, so nothing points at a dead page.
  */
-const SITE_LINKS: { label: string; href: string; ready: boolean }[] = [
-  { label: 'For students and families', href: '/students', ready: true },
-  { label: 'For universities', href: '/universities', ready: true },
+type SiteLink = { label: string; href: string; ready: boolean }
+
+/** Links shared by every page. */
+const COMMON: SiteLink[] = [
   { label: 'About', href: '/about', ready: READY.about },
-  { label: 'Pricing', href: '/pricing', ready: READY.pricing },
-  { label: 'How it works', href: '/students#how', ready: true },
-  { label: 'FAQs', href: '/students#faq', ready: true },
   { label: 'Guides', href: '/guides', ready: hasGuides },
   { label: 'Contact', href: '/contact', ready: true },
   { label: "Verify it's us", href: '/verify', ready: READY.verify },
 ]
 
+/** The footer follows the same student / university split as the header. */
+function siteLinks(audience: Audience | null): SiteLink[] {
+  if (audience === 'universities') {
+    return [
+      { label: 'For universities', href: '/universities', ready: true },
+      { label: 'How it works', href: '/universities#how', ready: true },
+      { label: 'FAQs', href: '/universities#faq', ready: true },
+      { label: 'For students', href: '/students', ready: true },
+      ...COMMON,
+    ]
+  }
+  if (audience === 'students') {
+    return [
+      { label: 'For students and families', href: '/students', ready: true },
+      { label: 'How it works', href: '/students#how', ready: true },
+      { label: 'FAQs', href: '/students#faq', ready: true },
+      { label: 'Pricing', href: '/pricing', ready: READY.pricing },
+      { label: 'For universities', href: '/universities', ready: true },
+      ...COMMON,
+    ]
+  }
+  return [
+    { label: 'For students and families', href: '/students', ready: true },
+    { label: 'For universities', href: '/universities', ready: true },
+    ...COMMON,
+  ]
+}
+
 const linkCls =
   'text-sm text-muted-foreground transition-colors hover:text-foreground'
 
 export function Footer() {
+  const { pathname } = useLocation()
+  const links = siteLinks(audienceFor(pathname))
   return (
     <footer className="border-t border-border bg-card">
       <div className="mx-auto max-w-6xl space-y-6 px-6 py-10">
@@ -46,7 +75,7 @@ export function Footer() {
           aria-label="Site"
           className="flex flex-wrap gap-x-6 gap-y-2"
         >
-          {SITE_LINKS.filter((l) => l.ready).map((l) => (
+          {links.filter((l) => l.ready).map((l) => (
             <Link key={l.label} to={l.href} className={linkCls}>
               {l.label}
             </Link>

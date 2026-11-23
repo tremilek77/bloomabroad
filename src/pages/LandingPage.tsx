@@ -5,7 +5,7 @@ import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { TrustStrip } from '@/components/blocks/TrustStrip'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { Section } from '@/components/blocks/Section'
-import { WaitlistForm } from '@/components/WaitlistForm'
+import { AudienceSplit } from '@/components/AudienceSplit'
 import { Reveal } from '@/components/saasta/Reveal'
 import { usePageMeta } from '@/lib/seo'
 import { useSchema, webPageNode } from '@/lib/schema'
@@ -79,12 +79,12 @@ export function LandingPage() {
             </Reveal>
           ))}
         </div>
-        <p className="mt-6">
-          <Link
-            to="/students#how"
-            className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
-          >
-            See how it works →
+        <p className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
+          <Link to="/students#how" className="text-primary underline-offset-4 hover:underline">
+            How it works for students →
+          </Link>
+          <Link to="/universities#how" className="text-primary underline-offset-4 hover:underline">
+            How it works for universities →
           </Link>
         </p>
       </Section>
@@ -115,7 +115,7 @@ export function LandingPage() {
         </Reveal>
       </Section>
 
-      <WaitlistForm />
+      <AudienceSplit />
     </PageShell>
   )
 }

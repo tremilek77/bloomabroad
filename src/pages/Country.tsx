@@ -6,7 +6,7 @@ import { Section } from '@/components/blocks/Section'
 import { CardGrid } from '@/components/blocks/Cards'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
-import { WaitlistForm } from '@/components/WaitlistForm'
+import { StudentWaitlistForm } from '@/components/StudentWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
 import { usePageMeta } from '@/lib/seo'
 import { breadcrumbNode, useSchema, webPageNode } from '@/lib/schema'
@@ -232,7 +232,7 @@ function CountryPage({ c }: { c: CountryConfig }) {
 
       <Disclaimer variant="short" />
 
-      <WaitlistForm defaultCountry={c.name} />
+      <StudentWaitlistForm defaultCountry={c.name} />
     </PageShell>
   )
 }

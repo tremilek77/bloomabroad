@@ -5,17 +5,26 @@ import { BloomMark } from './Logo'
 import { ThemeToggle } from './saasta/ThemeToggle'
 import { READY } from '@/content/site'
 import { hasGuides } from '@/content/guides'
+import { PAGES_WITH_FORM, audienceFor } from '@/lib/audience'
 
 const navCls =
   'nav-underline text-base font-medium text-muted-foreground transition-colors hover:text-foreground'
 
 export function NavBar() {
-  // Pages with their own waitlist form scroll to it; every other page sends
-  // the visitor to the homepage's form.
+  // The experience is split by audience: student pages show student navigation
+  // and the student form, university pages show only university navigation. A
+  // small link at the end switches sides. Neutral pages offer both.
   const { pathname } = useLocation()
-  const hasForm = ['/', '/students', '/universities', '/pricing', '/nigeria'].includes(pathname)
-  const joinHref = hasForm ? '#waitlist' : '/#waitlist'
-  const isUni = pathname === '/universities'
+  const audience = audienceFor(pathname)
+  const isUni = audience === 'universities'
+
+  // Pages with their own form scroll to it; others go to that audience's form
+  // (neutral pages go to the homepage chooser).
+  const joinHref = PAGES_WITH_FORM.includes(pathname)
+    ? '#waitlist'
+    : audience === 'students'
+      ? '/students#waitlist'
+      : '/#waitlist'
   const joinLabel = (
     <>
       <span className="sm:hidden">{isUni ? 'Early access' : 'Join waitlist'}</span>
@@ -27,13 +36,26 @@ export function NavBar() {
   const [open, setOpen] = useState(false)
   useEffect(() => setOpen(false), [pathname])
 
-  const links = [
-    { to: '/students', label: 'For students' },
-    { to: '/universities', label: 'For universities' },
-    { to: '/students#how', label: 'How it works' },
-    ...(READY.pricing ? [{ to: '/pricing', label: 'Pricing' }] : []),
-    ...(hasGuides ? [{ to: '/guides', label: 'Guides' }] : []),
-  ]
+  const guides = hasGuides ? [{ to: '/guides', label: 'Guides' }] : []
+  const links: { to: string; label: string; switchSide?: boolean }[] =
+    audience === 'universities'
+      ? [
+          { to: '/universities#how', label: 'How it works' },
+          { to: '/universities#faq', label: 'FAQs' },
+          { to: '/students', label: 'For students', switchSide: true },
+        ]
+      : audience === 'students'
+        ? [
+            { to: '/students#how', label: 'How it works' },
+            ...(READY.pricing ? [{ to: '/pricing', label: 'Pricing' }] : []),
+            ...guides,
+            { to: '/universities', label: 'For universities', switchSide: true },
+          ]
+        : [
+            { to: '/students', label: 'For students' },
+            { to: '/universities', label: 'For universities' },
+            ...guides,
+          ]
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur">
@@ -46,8 +68,13 @@ export function NavBar() {
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
-            <Link key={l.to} to={l.to} className={navCls}>
+            <Link
+              key={l.to}
+              to={l.to}
+              className={l.switchSide ? `${navCls} border-l border-border pl-8` : navCls}
+            >
               {l.label}
+              {l.switchSide && <span aria-hidden> →</span>}
             </Link>
           ))}
         </nav>
@@ -86,9 +113,14 @@ export function NavBar() {
             <Link
               key={l.to}
               to={l.to}
-              className="block rounded-lg px-3 py-3 text-base font-medium text-foreground hover:bg-secondary"
+              className={
+                l.switchSide
+                  ? 'mt-1 block rounded-lg border-t border-border px-3 py-3 text-base font-medium text-muted-foreground hover:bg-secondary'
+                  : 'block rounded-lg px-3 py-3 text-base font-medium text-foreground hover:bg-secondary'
+              }
             >
               {l.label}
+              {l.switchSide && <span aria-hidden> →</span>}
             </Link>
           ))}
           <div className="flex items-center justify-between rounded-lg px-3 py-2 text-base font-medium text-foreground">

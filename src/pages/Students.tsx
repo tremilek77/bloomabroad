@@ -17,7 +17,7 @@ import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { SampleOutcomeCard } from '@/components/previews/SampleOutcomeCard'
-import { WaitlistForm } from '@/components/WaitlistForm'
+import { StudentWaitlistForm } from '@/components/StudentWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
 import { usePageMeta } from '@/lib/seo'
 import { faqNode, useSchema, webPageNode } from '@/lib/schema'
@@ -232,7 +232,7 @@ export function StudentsPage() {
         </div>
       </Section>
 
-      <WaitlistForm defaultRole="Student" />
+      <StudentWaitlistForm />
     </PageShell>
   )
 }

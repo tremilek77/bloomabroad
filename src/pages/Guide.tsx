@@ -199,6 +199,20 @@ export function GuidePage() {
           <h2 id="next" className="text-xl font-bold text-heading">
             What to do next
           </h2>
+          {guide.audience === 'universities' ? (
+            <div className="mt-4 rounded-2xl border border-border bg-card p-5">
+              <h3 className="text-base font-bold text-heading">Screen applications with BloomAbroad</h3>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                The institution workspace is being built with a small cohort of Irish
+                institutions.
+              </p>
+              <div className="mt-4">
+                <ButtonLink to="/universities#waitlist" arrow>
+                  Request early access
+                </ButtonLink>
+              </div>
+            </div>
+          ) : (
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {READY.checklist && (
               <div className="rounded-2xl border border-border bg-card p-5">
@@ -227,7 +241,8 @@ export function GuidePage() {
               </div>
             </div>
           </div>
-          {READY.pricing && (
+          )}
+          {READY.pricing && guide.audience !== 'universities' && (
             <p className="mt-4 text-sm">
               <Link to="/pricing" className="font-semibold text-primary underline-offset-4 hover:underline">
                 See pricing →

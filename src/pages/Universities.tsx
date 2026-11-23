@@ -10,7 +10,7 @@ import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { WorkspacePreview } from '@/components/previews/WorkspacePreview'
-import { WaitlistForm } from '@/components/WaitlistForm'
+import { UniversityWaitlistForm } from '@/components/UniversityWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
 import { usePageMeta } from '@/lib/seo'
 import { faqNode, useSchema, webPageNode } from '@/lib/schema'
@@ -175,12 +175,7 @@ export function UniversitiesPage() {
 
       <Disclaimer variant="standard" />
 
-      <WaitlistForm
-        defaultRole="University"
-        eyebrow="Early access"
-        heading={<span className="text-glimmer">Request early access</span>}
-        lead="The institution workspace is being developed with a small cohort of Irish institutions."
-      />
+      <UniversityWaitlistForm />
     </PageShell>
   )
 }

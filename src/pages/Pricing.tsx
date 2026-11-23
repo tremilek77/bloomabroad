@@ -8,7 +8,7 @@ import { CardGrid } from '@/components/blocks/Cards'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { Table } from '@/components/legal/Prose'
-import { WaitlistForm } from '@/components/WaitlistForm'
+import { StudentWaitlistForm } from '@/components/StudentWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
 import { cn } from '@/lib/utils'
 import { usePageMeta } from '@/lib/seo'
@@ -249,7 +249,7 @@ export function PricingPage() {
 
       <Disclaimer variant="standard" />
 
-      <WaitlistForm />
+      <StudentWaitlistForm />
     </PageShell>
   )
 }
