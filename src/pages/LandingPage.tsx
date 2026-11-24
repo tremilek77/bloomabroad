@@ -7,7 +7,6 @@ import { TrustStrip } from '@/components/blocks/TrustStrip'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { Section } from '@/components/blocks/Section'
 import { IconList } from '@/components/blocks/IconList'
-import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { AudienceSplit } from '@/components/AudienceSplit'
 import { Reveal } from '@/components/saasta/Reveal'
@@ -121,7 +120,6 @@ export function LandingPage() {
           </>
         }
       />
-      <PageMetaBar path="/" minutes={3} />
 
       <TrustStrip items={TRUST} />
       <Disclaimer variant="short" />

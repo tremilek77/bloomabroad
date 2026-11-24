@@ -19,7 +19,6 @@ import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { ReportCoversCard } from '@/components/previews/ReportCoversCard'
 import { IconList } from '@/components/blocks/IconList'
-import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { StudentWaitlistForm } from '@/components/StudentWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
 import { usePageMeta } from '@/lib/seo'
@@ -55,14 +54,6 @@ const STEPS = [
     title: 'Get your outcome',
     body: 'Within 5 working days: where you stand, why, and what to do next.',
   },
-]
-
-const TOC = [
-  { id: 'how', label: 'How it works' },
-  { id: 'report', label: 'Your report' },
-  { id: 'fit', label: 'Is this for you?' },
-  { id: 'parents', label: 'Parents and sponsors' },
-  { id: 'faq', label: 'FAQs' },
 ]
 
 const REPORT = [
@@ -172,7 +163,6 @@ export function StudentsPage() {
         }
         aside={<ReportCoversCard />}
       />
-      <PageMetaBar path={PATH} minutes={5} toc={TOC} />
 
       <Section tone="card" eyebrow="Why check first?" title="Know before you commit">
         <CardGrid items={WHY} />

@@ -6,7 +6,6 @@ import { Section } from '@/components/blocks/Section'
 import { CardGrid } from '@/components/blocks/Cards'
 import { Steps } from '@/components/blocks/Steps'
 import { IconList } from '@/components/blocks/IconList'
-import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { AudienceSplit } from '@/components/AudienceSplit'
@@ -23,15 +22,6 @@ const DESCRIPTION =
   'One structured method, applied the same way every time. See how BloomAbroad checks application and immigration readiness, and how a consultant reviews results.'
 const ANSWER =
   'BloomAbroad assesses enrolment readiness with one structured methodology, applied the same way every time. It checks application readiness and immigration readiness together against expert-designed scenarios built on more than ten years of documented student journeys. An experienced consultant reviews every result before it is issued.'
-
-const TOC = [
-  { id: 'readiness', label: 'What we mean by readiness' },
-  { id: 'method', label: 'Where the method comes from' },
-  { id: 'process', label: 'How an assessment works' },
-  { id: 'outcomes', label: 'The three outcomes' },
-  { id: 'limits', label: 'What we do not do' },
-  { id: 'faq', label: 'FAQs' },
-]
 
 const STEPS = [
   { title: 'You provide the facts', body: 'A short questionnaire and your documents, uploaded securely.' },
@@ -104,7 +94,6 @@ export function HowWeAssessPage() {
         }
         answer={ANSWER}
       />
-      <PageMetaBar path={PATH} minutes={4} toc={TOC} />
 
       <nav aria-label="Breadcrumb" className="mx-auto max-w-6xl px-6 pt-4 text-sm text-muted-foreground">
         <ol className="flex flex-wrap items-center gap-x-2">
