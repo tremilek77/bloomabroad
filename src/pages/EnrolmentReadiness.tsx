@@ -4,7 +4,6 @@ import { PageShell } from '@/components/PageShell'
 import { Hero } from '@/components/blocks/Hero'
 import { Section } from '@/components/blocks/Section'
 import { CardGrid } from '@/components/blocks/Cards'
-import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { AudienceSplit } from '@/components/AudienceSplit'
@@ -20,14 +19,6 @@ const DESCRIPTION =
   'Enrolment readiness is how prepared someone is to get an offer, meet immigration requirements and start a course in Ireland. What it covers and why it matters.'
 const ANSWER =
   'Enrolment readiness is how prepared an applicant is to get an offer, meet immigration requirements and begin their course. It has two parts: application readiness and immigration readiness. Checking both before you apply shows gaps while there is still time to fix them, instead of after fees are paid and months have passed.'
-
-const TOC = [
-  { id: 'what', label: 'What it is' },
-  { id: 'parts', label: 'The two parts' },
-  { id: 'why', label: 'Why check first' },
-  { id: 'who-decides', label: 'Who decides what' },
-  { id: 'glossary', label: 'Glossary' },
-]
 
 /**
  * Glossary. The Irish terms come from the Irish immigration service's policy
@@ -117,7 +108,6 @@ export function EnrolmentReadinessPage() {
         }
         answer={ANSWER}
       />
-      <PageMetaBar path={PATH} minutes={4} toc={TOC} />
 
       <nav aria-label="Breadcrumb" className="mx-auto max-w-6xl px-6 pt-4 text-sm text-muted-foreground">
         <ol className="flex flex-wrap items-center gap-x-2">

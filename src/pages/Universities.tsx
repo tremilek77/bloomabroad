@@ -7,7 +7,6 @@ import { CardGrid } from '@/components/blocks/Cards'
 import { Steps } from '@/components/blocks/Steps'
 import { TrustStrip } from '@/components/blocks/TrustStrip'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
-import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { FaqAccordion } from '@/components/blocks/FaqAccordion'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { WorkspacePreview } from '@/components/previews/WorkspacePreview'
@@ -110,15 +109,6 @@ export function UniversitiesPage() {
           </>
         }
         aside={<WorkspacePreview />}
-      />
-      <PageMetaBar
-        path={PATH}
-        minutes={4}
-        toc={[
-          { id: 'how', label: 'How it will work' },
-          { id: 'faq', label: 'FAQs' },
-          { id: 'waitlist', label: 'Early access' },
-        ]}
       />
 
       <Section

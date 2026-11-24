@@ -6,7 +6,6 @@ import { Section } from '@/components/blocks/Section'
 import { CardGrid } from '@/components/blocks/Cards'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
-import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { StudentWaitlistForm } from '@/components/StudentWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
 import { usePageMeta } from '@/lib/seo'
@@ -80,7 +79,6 @@ function CountryPage({ c }: { c: CountryConfig }) {
         }
       />
 
-      <PageMetaBar path={path} minutes={3} />
 
       <nav aria-label="Breadcrumb" className="mx-auto max-w-6xl px-6 pt-4 text-sm text-muted-foreground">
         <ol className="flex flex-wrap items-center gap-x-2">

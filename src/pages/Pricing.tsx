@@ -7,7 +7,6 @@ import { Section } from '@/components/blocks/Section'
 import { CardGrid } from '@/components/blocks/Cards'
 import { ButtonLink } from '@/components/blocks/ButtonLink'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
-import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { Table } from '@/components/legal/Prose'
 import { StudentWaitlistForm } from '@/components/StudentWaitlistForm'
 import { Reveal } from '@/components/saasta/Reveal'
@@ -125,7 +124,6 @@ export function PricingPage() {
         }
         note="Bookings open January 2027."
       />
-      <PageMetaBar path={PATH} minutes={3} />
 
       <Section width="wide">
         {/* Currency switcher */}

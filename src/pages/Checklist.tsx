@@ -4,7 +4,6 @@ import { z } from 'zod'
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
 import { PageShell } from '@/components/PageShell'
 import { Hero } from '@/components/blocks/Hero'
-import { PageMetaBar } from '@/components/blocks/PageMetaBar'
 import { Disclaimer } from '@/components/blocks/Disclaimer'
 import { CountryOptions, Field, Select, inputCls } from '@/components/form/fields'
 import { usePageMeta } from '@/lib/seo'
@@ -144,7 +143,6 @@ export function ChecklistPage() {
         answer={ANSWER}
         note="The checklist is free. The full assessment is paid. We don't ask about money or visa history."
       />
-      <PageMetaBar path={PATH} minutes={2} />
 
       <section className="px-6 pb-20 pt-4">
         <div className="mx-auto max-w-xl rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
